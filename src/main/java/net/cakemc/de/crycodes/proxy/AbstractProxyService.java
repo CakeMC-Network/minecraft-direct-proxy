@@ -5,6 +5,7 @@ import net.cakemc.de.crycodes.proxy.player.ConnectedPlayer;
 import net.cakemc.de.crycodes.proxy.player.ProxiedPlayer;
 import net.cakemc.de.crycodes.proxy.target.AbstractTarget;
 import net.cakemc.mc.lib.game.event.EventManager;
+import net.cakemc.screensystem.ScreenAbleObject;
 
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
@@ -14,7 +15,7 @@ import java.util.UUID;
 /**
  * The type Abstract proxy service.
  */
-public abstract class AbstractProxyService {
+public abstract class AbstractProxyService implements ScreenAbleObject {
 
     /**
      * Gets default target.
@@ -83,6 +84,8 @@ public abstract class AbstractProxyService {
      */
     public abstract EventManager getEventManager();
 
+    public abstract void start();
+
     /**
      * Stop.
      */
@@ -127,4 +130,5 @@ public abstract class AbstractProxyService {
      */
     public abstract AbstractTarget constructServerInfo(String name, SocketAddress address);
 
+    public abstract String getIdentifier();
 }

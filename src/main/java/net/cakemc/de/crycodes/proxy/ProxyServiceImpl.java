@@ -20,7 +20,7 @@ import java.util.UUID;
 /**
  * The type Proxy service.
  */
-public class ProxyServiceImpl extends AbstractProxyService implements ScreenAbleObject {
+public class ProxyServiceImpl extends AbstractProxyService {
     /**
      * The constant COMPRESSION_THRESHOLD.
      */
@@ -78,6 +78,7 @@ public class ProxyServiceImpl extends AbstractProxyService implements ScreenAble
     /**
      * Start.
      */
+    @Override
     public void start() {
         this.networkServer.start();
     }
@@ -196,6 +197,7 @@ public class ProxyServiceImpl extends AbstractProxyService implements ScreenAble
      *
      * @return the identifier
      */
+    @Override
     public String getIdentifier() {
         return identifier;
     }
