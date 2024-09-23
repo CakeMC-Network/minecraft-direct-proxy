@@ -41,7 +41,6 @@ repositories {
 
 dependencies {
     implementation("io.netty:netty-all:4.1.112.Final")
-    implementation("com.google.guava:guava:33.3.0-jre")
 
     implementation(
         group = "net.cakemc.mc.server",

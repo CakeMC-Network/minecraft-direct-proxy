@@ -1,6 +1,5 @@
 package net.cakemc.de.crycodes.proxy.protocol;
 
-import com.google.common.collect.Iterables;
 import net.cakemc.de.crycodes.proxy.network.packet.AbstractPacket;
 import net.cakemc.de.crycodes.proxy.network.packet.BadPacketException;
 
@@ -43,7 +42,7 @@ public final class DirectionData {
     private ProtocolData getProtocolData(int version) {
         ProtocolData protocol = protocols.get(version);
         if (protocol == null && (protocolPhase != Protocol.GAME)) {
-            protocol = Iterables.getFirst(protocols.values(), null);
+            protocol = protocols.values().stream().findFirst().orElse(null);
         }
         return protocol;
     }

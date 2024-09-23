@@ -1,8 +1,8 @@
 package net.cakemc.de.crycodes.proxy;
 
-import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
+import io.netty.util.concurrent.DefaultThreadFactory;
 import net.cakemc.de.crycodes.proxy.network.PipelineUtils;
 import net.cakemc.de.crycodes.proxy.network.codec.ServerChannelInitializer;
 import net.cakemc.de.crycodes.proxy.units.ProxyServiceAddress;
@@ -40,8 +40,7 @@ public class NetworkServer {
      * Start.
      */
     public void start() {
-        eventLoopGroup = PipelineUtils.newEventLoopGroup(0, new ThreadFactoryBuilder()
-                .setNameFormat("Netty IO Thread #%1$d").build());
+        eventLoopGroup = PipelineUtils.newEventLoopGroup(0, new DefaultThreadFactory("network-server"));
 
         proxyServiceImpl.setRunning(true);
         ChannelFutureListener listener = future -> {

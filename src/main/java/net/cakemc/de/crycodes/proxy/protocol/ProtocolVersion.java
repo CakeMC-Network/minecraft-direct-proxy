@@ -1,7 +1,7 @@
 package net.cakemc.de.crycodes.proxy.protocol;
 
-import com.google.common.collect.ImmutableList;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -199,11 +199,11 @@ public enum ProtocolVersion {
      * @return the supported versions
      */
     public static List<String> getSupportedVersions() {
-        ImmutableList.Builder<String> supportedVersions = ImmutableList.builder();
+        List<String> supportedVersions = new ArrayList<>();
         for (ProtocolVersion version : ProtocolVersion.values()) {
             supportedVersions.add(version.getVersionName());
         }
-        return supportedVersions.build();
+        return supportedVersions;
     }
 
     /**
@@ -212,11 +212,11 @@ public enum ProtocolVersion {
      * @return the supported version ids
      */
     public static List<Integer> getSupportedVersionIds() {
-        ImmutableList.Builder<Integer> supportedVersionIds = ImmutableList.builder();
+        List<Integer> supportedVersionIds = new ArrayList<>();
         for (ProtocolVersion version : ProtocolVersion.values()) {
             supportedVersionIds.add(version.getProtocolId());
         }
-        return supportedVersionIds.build();
+        return supportedVersionIds;
     }
 
     /**
