@@ -1,2 +1,2 @@
-rootProject.name = "minecraft-direct-proxy"
+rootProject.name = "direct"
 
