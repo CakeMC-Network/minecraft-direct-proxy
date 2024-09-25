@@ -60,35 +60,6 @@ public class StatusHandler {
      */
     public void handle(LegacyPingPacket ping) throws Exception {
         loginHandler.setLegacy(true);
-        final boolean v1_5 = ping.isV1_5();
-
-        final String motd = loginHandler.getListener().getMotd();
-        final int protocol = loginHandler.getService().getProtocolVersion();
-        //Callback<ServerPing> pingBack = (result, error) -> {
-        //    if (error != null) {
-        //        result = getPingInfo("can't ping service...", protocol);
-        //    }
-        //
-        //    ProxyPingEvent proxyPingEvent = new ProxyPingEvent(loginHandler, result);
-        //    loginHandler.getService().getEventManager().call(proxyPingEvent);
-        //    if (loginHandler.getChannel().isClosing()) {
-        //        return;
-        //    }
-        //
-        //    ServerPing legacy = proxyPingEvent.getResponse();
-        //    String kickMessage;
-        //    if (v1_5) {
-        //        kickMessage = ChatColor.DARK_BLUE + "\000" + 127 + '\000' + legacy.getVersion().getName() + '\000' + getFirstLine(legacy.getDescription())
-        //                + '\000' + ((legacy.getPlayers() != null) ? legacy.getPlayers().getOnline() : "-1") + '\000' + ((legacy.getPlayers() != null) ? legacy.getPlayers().getMax() : "-1");
-        //    } else {
-        //        // Clients <= 1.3 don't support colored motds because the color char is used as delimiter
-        //        kickMessage = ChatColor.stripColor(getFirstLine(legacy.getDescription())) + '§' + ((legacy.getPlayers() != null) ?
-        //                legacy.getPlayers().getOnline() : "-1") + '§' + ((legacy.getPlayers() != null) ? legacy.getPlayers().getMax() : "-1");
-        //    }
-        //    loginHandler.getChannel().close(kickMessage);
-        //
-        //};
-        //pingBack.done(getPingInfo(motd, protocol), null);
     }
 
     private Status.Info getPingInfo(String motd, int protocol) {

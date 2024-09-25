@@ -53,7 +53,7 @@ public class NetworkServer {
                 .channel(PipelineUtils.getServerChannel(new InetSocketAddress(host, port)))
                 .option(ChannelOption.SO_REUSEADDR, true)
                 .childAttr(PipelineUtils.LISTENER, new ProxyServiceAddress(proxyServiceImpl.getIdentifier(),
-                        new InetSocketAddress(host, port), "proxy-instance"))
+                        new InetSocketAddress(host, port), "This is our custom minecraft proxy instance!"))
 
                 .childHandler(channelInitializer)
                 .group(eventLoopGroup)
