@@ -3,9 +3,9 @@ package net.cakemc.de.crycodes.proxy.target;
 import net.cakemc.de.crycodes.proxy.player.Connection;
 
 /**
- * The interface Server.
+ * The interface TargetServer.
  */
-public interface Server extends Connection {
+public interface TargetServer extends Connection {
 
     /**
      * Gets info.

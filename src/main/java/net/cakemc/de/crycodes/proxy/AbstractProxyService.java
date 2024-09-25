@@ -2,7 +2,7 @@ package net.cakemc.de.crycodes.proxy;
 
 
 import net.cakemc.de.crycodes.proxy.player.ConnectedPlayer;
-import net.cakemc.de.crycodes.proxy.player.ProxiedPlayer;
+import net.cakemc.de.crycodes.proxy.player.ProxyPlayer;
 import net.cakemc.de.crycodes.proxy.target.AbstractTarget;
 import net.cakemc.mc.lib.game.event.EventManager;
 import net.cakemc.screensystem.ScreenAbleObject;
@@ -29,7 +29,7 @@ public abstract class AbstractProxyService implements ScreenAbleObject {
      *
      * @return the players
      */
-    public abstract List<? extends ProxiedPlayer> getPlayers();
+    public abstract List<? extends ProxyPlayer> getPlayers();
 
     /**
      * Gets player.
@@ -37,7 +37,7 @@ public abstract class AbstractProxyService implements ScreenAbleObject {
      * @param name the name
      * @return the player
      */
-    public abstract ProxiedPlayer getPlayer(String name);
+    public abstract ProxyPlayer getPlayer(String name);
 
     /**
      * Gets player.
@@ -45,7 +45,7 @@ public abstract class AbstractProxyService implements ScreenAbleObject {
      * @param uuid the uuid
      * @return the player
      */
-    public abstract ProxiedPlayer getPlayer(UUID uuid);
+    public abstract ProxyPlayer getPlayer(UUID uuid);
 
     /**
      * Gets targets.

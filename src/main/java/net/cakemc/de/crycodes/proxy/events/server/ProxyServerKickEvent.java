@@ -1,6 +1,6 @@
 package net.cakemc.de.crycodes.proxy.events.server;
 
-import net.cakemc.de.crycodes.proxy.player.ProxiedPlayer;
+import net.cakemc.de.crycodes.proxy.player.ProxyPlayer;
 import net.cakemc.de.crycodes.proxy.target.AbstractTarget;
 import net.cakemc.mc.lib.game.event.AbstractEvent;
 import net.cakemc.mc.lib.game.event.Cancelable;
@@ -10,10 +10,10 @@ import net.cakemc.mc.lib.game.text.test.api.chat.TextComponent;
 import java.util.Objects;
 
 /**
- * The type Server kick event.
+ * The type TargetServer kick event.
  */
-public class ServerKickEvent extends AbstractEvent implements Cancelable {
-    private final ProxiedPlayer player;
+public class ProxyServerKickEvent extends AbstractEvent implements Cancelable {
+    private final ProxyPlayer player;
     private final AbstractTarget kickedFrom;
     private boolean cancelled;
     private BaseComponent reason;
@@ -21,32 +21,30 @@ public class ServerKickEvent extends AbstractEvent implements Cancelable {
     private State state;
 
     /**
-     * Instantiates a new Server kick event.
+     * Instantiates a new TargetServer kick event.
      *
      * @param player              the player
      * @param kickReasonComponent the kick reason component
      * @param cancelServer        the cancel server
      */
-    @Deprecated
-    public ServerKickEvent(ProxiedPlayer player, BaseComponent[] kickReasonComponent, AbstractTarget cancelServer) {
+    public ProxyServerKickEvent(ProxyPlayer player, BaseComponent[] kickReasonComponent, AbstractTarget cancelServer) {
         this(player, kickReasonComponent, cancelServer, State.UNKNOWN);
     }
 
     /**
-     * Instantiates a new Server kick event.
+     * Instantiates a new TargetServer kick event.
      *
      * @param player              the player
      * @param kickReasonComponent the kick reason component
      * @param cancelServer        the cancel server
      * @param state               the state
      */
-    @Deprecated
-    public ServerKickEvent(ProxiedPlayer player, BaseComponent[] kickReasonComponent, AbstractTarget cancelServer, State state) {
+    public ProxyServerKickEvent(ProxyPlayer player, BaseComponent[] kickReasonComponent, AbstractTarget cancelServer, State state) {
         this(player, player.getServer().getInfo(), kickReasonComponent, cancelServer, state);
     }
 
     /**
-     * Instantiates a new Server kick event.
+     * Instantiates a new TargetServer kick event.
      *
      * @param player              the player
      * @param kickedFrom          the kicked from
@@ -54,13 +52,12 @@ public class ServerKickEvent extends AbstractEvent implements Cancelable {
      * @param cancelServer        the cancel server
      * @param state               the state
      */
-    @Deprecated
-    public ServerKickEvent(ProxiedPlayer player, AbstractTarget kickedFrom, BaseComponent[] kickReasonComponent, AbstractTarget cancelServer, State state) {
+    public ProxyServerKickEvent(ProxyPlayer player, AbstractTarget kickedFrom, BaseComponent[] kickReasonComponent, AbstractTarget cancelServer, State state) {
         this(player, kickedFrom, TextComponent.fromArray(kickReasonComponent), cancelServer, state);
     }
 
     /**
-     * Instantiates a new Server kick event.
+     * Instantiates a new TargetServer kick event.
      *
      * @param player       the player
      * @param kickedFrom   the kicked from
@@ -68,7 +65,7 @@ public class ServerKickEvent extends AbstractEvent implements Cancelable {
      * @param cancelServer the cancel server
      * @param state        the state
      */
-    public ServerKickEvent(ProxiedPlayer player, AbstractTarget kickedFrom, BaseComponent reason, AbstractTarget cancelServer, State state) {
+    public ProxyServerKickEvent(ProxyPlayer player, AbstractTarget kickedFrom, BaseComponent reason, AbstractTarget cancelServer, State state) {
         this.player = player;
         this.kickedFrom = kickedFrom;
         this.reason = reason;
@@ -81,7 +78,6 @@ public class ServerKickEvent extends AbstractEvent implements Cancelable {
      *
      * @return the kick reason
      */
-    @Deprecated
     public String getKickReason() {
         return BaseComponent.toLegacyText(getReason());
     }
@@ -91,7 +87,6 @@ public class ServerKickEvent extends AbstractEvent implements Cancelable {
      *
      * @param reason the reason
      */
-    @Deprecated
     public void setKickReason(String reason) {
         this.setReason(TextComponent.fromLegacy(reason));
     }
@@ -101,7 +96,6 @@ public class ServerKickEvent extends AbstractEvent implements Cancelable {
      *
      * @return the base component [ ]
      */
-    @Deprecated
     public BaseComponent[] getKickReasonComponent() {
         return new BaseComponent[]{getReason()};
     }
@@ -111,7 +105,6 @@ public class ServerKickEvent extends AbstractEvent implements Cancelable {
      *
      * @param kickReasonComponent the kick reason component
      */
-    @Deprecated
     public void setKickReasonComponent(BaseComponent[] kickReasonComponent) {
         this.setReason(TextComponent.fromArray(kickReasonComponent));
     }
@@ -121,7 +114,7 @@ public class ServerKickEvent extends AbstractEvent implements Cancelable {
      *
      * @return the player
      */
-    public ProxiedPlayer getPlayer() {
+    public ProxyPlayer getPlayer() {
         return this.player;
     }
 
@@ -213,13 +206,13 @@ public class ServerKickEvent extends AbstractEvent implements Cancelable {
 
     @Override
     public String toString() {
-        return "ServerKickEvent(player=" + this.getPlayer() + ", kickedFrom=" + this.getKickedFrom() + ", cancelled=" + this.isCancelled() + ", reason=" + this.getReason() + ", cancelServer=" + this.getCancelServer() + ", state=" + this.getState() + ")";
+        return "ProxyServerKickEvent(player=" + this.getPlayer() + ", kickedFrom=" + this.getKickedFrom() + ", cancelled=" + this.isCancelled() + ", reason=" + this.getReason() + ", cancelServer=" + this.getCancelServer() + ", state=" + this.getState() + ")";
     }
 
     @Override
     public boolean equals(final Object o) {
         if (o == this) return true;
-        if (!(o instanceof ServerKickEvent other)) return false;
+        if (!(o instanceof ProxyServerKickEvent other)) return false;
         if (!other.canEqual(this)) return false;
         if (this.isCancelled() != other.isCancelled()) return false;
         final Object this$player = this.getPlayer();
@@ -248,7 +241,7 @@ public class ServerKickEvent extends AbstractEvent implements Cancelable {
      * @return the boolean
      */
     protected boolean canEqual(final Object other) {
-        return other instanceof ServerKickEvent;
+        return other instanceof ProxyServerKickEvent;
     }
 
     @Override

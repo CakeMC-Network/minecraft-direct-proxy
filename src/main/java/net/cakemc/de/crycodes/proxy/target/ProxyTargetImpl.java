@@ -2,7 +2,7 @@ package net.cakemc.de.crycodes.proxy.target;
 
 
 import net.cakemc.de.crycodes.proxy.network.packet.AbstractPacket;
-import net.cakemc.de.crycodes.proxy.player.ProxiedPlayer;
+import net.cakemc.de.crycodes.proxy.player.ProxyPlayer;
 
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
@@ -14,7 +14,7 @@ import java.util.*;
 public class ProxyTargetImpl implements AbstractTarget {
     private final String name;
     private final SocketAddress socketAddress;
-    private final Collection<ProxiedPlayer> players = new ArrayList<>();
+    private final Collection<ProxyPlayer> players = new ArrayList<>();
     private final Queue<AbstractPacket> packetQueue = new LinkedList<>();
 
     /**
@@ -33,7 +33,7 @@ public class ProxyTargetImpl implements AbstractTarget {
      *
      * @param player the player
      */
-    public void addPlayer(ProxiedPlayer player) {
+    public void addPlayer(ProxyPlayer player) {
         synchronized (this.players) {
             players.add(player);
         }
@@ -44,14 +44,14 @@ public class ProxyTargetImpl implements AbstractTarget {
      *
      * @param player the player
      */
-    public void removePlayer(ProxiedPlayer player) {
+    public void removePlayer(ProxyPlayer player) {
         synchronized (this.players) {
             players.remove(player);
         }
     }
 
     @Override
-    public Collection<ProxiedPlayer> getPlayers() {
+    public Collection<ProxyPlayer> getPlayers() {
         synchronized (this.players) {
             return Collections.unmodifiableCollection(new HashSet<>(players));
         }

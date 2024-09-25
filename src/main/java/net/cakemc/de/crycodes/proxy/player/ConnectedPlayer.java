@@ -11,7 +11,7 @@ import net.cakemc.de.crycodes.proxy.AbstractProxyService;
 import net.cakemc.de.crycodes.proxy.channel.PlayerChannel;
 import net.cakemc.de.crycodes.proxy.connection.ConnectionListener;
 import net.cakemc.de.crycodes.proxy.connection.handler.ProxyLoginHandler;
-import net.cakemc.de.crycodes.proxy.events.server.ServerConnectEvent;
+import net.cakemc.de.crycodes.proxy.events.server.ProxyServerConnectEvent;
 import net.cakemc.de.crycodes.proxy.network.PacketReader;
 import net.cakemc.de.crycodes.proxy.network.PipelineUtils;
 import net.cakemc.de.crycodes.proxy.network.codec.minecraft.MinecraftDecoder;
@@ -38,7 +38,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 /**
  * The type Connected player.
  */
-public final class ConnectedPlayer implements ProxiedPlayer {
+public final class ConnectedPlayer implements ProxyPlayer {
 
     private final AbstractProxyService abstractProxyService;
 
@@ -49,7 +49,7 @@ public final class ConnectedPlayer implements ProxiedPlayer {
     private final Collection<AbstractTarget> pendingConnects = new HashSet<>();
     private final Queue<AbstractPacket> packetQueue = new ConcurrentLinkedQueue<>();
 
-    private ServerConnection server;
+    private TargetServerConnection server;
     private Object dimension;
     private boolean dimensionChange = true;
     private int ping = 100;
@@ -145,22 +145,17 @@ public final class ConnectedPlayer implements ProxiedPlayer {
 
     @Override
     public void connect(AbstractTarget target) {
-        connect(target, null, ServerConnectEvent.Reason.PLUGIN);
+        connect(target, null, ConnectionReason.UNKNOWN);
     }
 
     @Override
-    public void connect(AbstractTarget target, ServerConnectEvent.Reason reason) {
-        connect(target, null, false, reason);
+    public void connect(AbstractTarget target, ConnectionReason reason) {
+        connect(target, null, reason);
     }
 
     @Override
     public void connect(AbstractTarget target, ConnectionListener<Boolean> connectionListener) {
-        connect(target, connectionListener, false, ServerConnectEvent.Reason.PLUGIN);
-    }
-
-    @Override
-    public void connect(AbstractTarget target, ConnectionListener<Boolean> connectionListener, ServerConnectEvent.Reason reason) {
-        connect(target, connectionListener, false, reason);
+        connect(target, connectionListener, ConnectionReason.UNKNOWN);
     }
 
     /**
@@ -168,9 +163,8 @@ public final class ConnectedPlayer implements ProxiedPlayer {
      *
      * @param target the target
      */
-    @Deprecated
     public void connectNow(AbstractTarget target) {
-        connectNow(target, ServerConnectEvent.Reason.UNKNOWN);
+        connectNow(target, ConnectionReason.UNKNOWN);
     }
 
     /**
@@ -179,7 +173,7 @@ public final class ConnectedPlayer implements ProxiedPlayer {
      * @param target the target
      * @param reason the reason
      */
-    public void connectNow(AbstractTarget target, ServerConnectEvent.Reason reason) {
+    public void connectNow(AbstractTarget target, ConnectionReason reason) {
         dimensionChange = true;
         connect(target, reason);
     }
@@ -215,21 +209,9 @@ public final class ConnectedPlayer implements ProxiedPlayer {
      *
      * @param info               the info
      * @param connectionListener the connection listener
-     * @param retry              the retry
-     */
-    public void connect(AbstractTarget info, final ConnectionListener<Boolean> connectionListener, final boolean retry) {
-        connect(info, connectionListener, retry, ServerConnectEvent.Reason.PLUGIN);
-    }
-
-    /**
-     * Connect.
-     *
-     * @param info               the info
-     * @param connectionListener the connection listener
-     * @param retry              the retry
      * @param reason             the reason
      */
-    public void connect(AbstractTarget info, final ConnectionListener<Boolean> connectionListener, final boolean retry, ServerConnectEvent.Reason reason) {
+    public void connect(AbstractTarget info, final ConnectionListener<Boolean> connectionListener,  ConnectionReason reason) {
         if (info == null) {
             this.disconnect("§cconnection to null server.");
         }
@@ -241,14 +223,14 @@ public final class ConnectedPlayer implements ProxiedPlayer {
     @Override
     public void connect(final TargetRequest request) {
         final ConnectionListener<TargetRequest.Result> connectionListener = request.getCallback();
-        ServerConnectEvent event = new ServerConnectEvent(this, request.getTarget(), request.getReason(), request);
+        ProxyServerConnectEvent event = new ProxyServerConnectEvent(this, request.getTarget(), request.getReason(), request);
         abstractProxyService.getEventManager().call(event);
         if (event.isCancelled()) {
             if (connectionListener != null) {
                 connectionListener.done(TargetRequest.Result.EVENT_CANCEL, null);
             }
             if (getServer() == null && !ch.isClosing()) {
-                throw new IllegalStateException("Cancelled ServerConnectEvent with no server or disconnect.");
+                throw new IllegalStateException("Cancelled ProxyServerConnectEvent with no server or disconnect.");
             }
             return;
         }
@@ -272,8 +254,12 @@ public final class ConnectedPlayer implements ProxiedPlayer {
             @Override
             protected void initChannel(Channel ch) throws Exception {
                 PipelineUtils.SERVER_PLAYER_CHANNEL_INITIALIZER.initChannel(ch);
-                ch.pipeline().addAfter(PipelineUtils.FRAME_DECODER, PipelineUtils.PACKET_DECODER, new MinecraftDecoder(false, Protocol.HANDSHAKE, getPendingConnection().getVersion()));
-                ch.pipeline().addAfter(PipelineUtils.FRAME_PREPENDER, PipelineUtils.PACKET_ENCODER, new MinecraftEncoder(Protocol.HANDSHAKE, false, getPendingConnection().getVersion()));
+                ch.pipeline().addAfter(PipelineUtils.FRAME_DECODER, PipelineUtils.PACKET_DECODER,
+                        new MinecraftDecoder(false, Protocol.HANDSHAKE, getPendingConnection().getVersion()));
+
+                ch.pipeline().addAfter(PipelineUtils.FRAME_PREPENDER, PipelineUtils.PACKET_ENCODER,
+                        new MinecraftEncoder(Protocol.HANDSHAKE, false, getPendingConnection().getVersion()));
+
                 ch.pipeline().get(PacketReader.class).setHandler(new ServerConnector(abstractProxyService, ConnectedPlayer.this, target));
             }
         };
@@ -287,7 +273,7 @@ public final class ConnectedPlayer implements ProxiedPlayer {
                 AbstractTarget def = updateAndGetNextServer(target);
                 if (request.isRetry() && def != null && (getServer() == null || def != getServer().getInfo())) {
                     sendMessages("connecting to fallback service..");
-                    connect(def, null, true, ServerConnectEvent.Reason.LOBBY_FALLBACK);
+                    connect(def, null, ConnectionReason.LOBBY_FALLBACK);
                 } else if (dimensionChange) {
                     disconnect(connectionFailMessage(future.cause()));
                 } else {
@@ -495,7 +481,7 @@ public final class ConnectedPlayer implements ProxiedPlayer {
         return this.pendingConnects;
     }
 
-    public ServerConnection getServer() {
+    public TargetServerConnection getServer() {
         return this.server;
     }
 
@@ -504,7 +490,7 @@ public final class ConnectedPlayer implements ProxiedPlayer {
      *
      * @param server the server
      */
-    public void setServer(final ServerConnection server) {
+    public void setServer(final TargetServerConnection server) {
         this.server = server;
     }
 

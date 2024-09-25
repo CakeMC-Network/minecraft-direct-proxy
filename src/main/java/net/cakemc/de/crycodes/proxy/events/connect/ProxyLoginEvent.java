@@ -1,6 +1,6 @@
 package net.cakemc.de.crycodes.proxy.events.connect;
 
-import net.cakemc.de.crycodes.proxy.player.ProxiedPlayer;
+import net.cakemc.de.crycodes.proxy.player.ProxyPlayer;
 import net.cakemc.de.crycodes.proxy.target.AbstractTarget;
 import net.cakemc.mc.lib.game.event.AbstractEvent;
 
@@ -9,8 +9,8 @@ import java.util.Objects;
 /**
  * The type Post login event.
  */
-public class PostLoginEvent extends AbstractEvent {
-    private final ProxiedPlayer player;
+public class ProxyLoginEvent extends AbstractEvent {
+    private final ProxyPlayer player;
     private AbstractTarget target;
 
     /**
@@ -19,7 +19,7 @@ public class PostLoginEvent extends AbstractEvent {
      * @param player the player
      * @param target the target
      */
-    public PostLoginEvent(ProxiedPlayer player, AbstractTarget target) {
+    public ProxyLoginEvent(ProxyPlayer player, AbstractTarget target) {
         this.player = player;
         this.target = target;
     }
@@ -29,7 +29,7 @@ public class PostLoginEvent extends AbstractEvent {
      *
      * @return the player
      */
-    public ProxiedPlayer getPlayer() {
+    public ProxyPlayer getPlayer() {
         return this.player;
     }
 
@@ -53,7 +53,7 @@ public class PostLoginEvent extends AbstractEvent {
 
     @Override
     public String toString() {
-        return "PostLoginEvent(player=" + this.getPlayer() + ", target=" + this.getTarget() + ")";
+        return "ProxyLoginEvent(player=" + this.getPlayer() + ", target=" + this.getTarget() + ")";
     }
 
     @Override
@@ -64,7 +64,7 @@ public class PostLoginEvent extends AbstractEvent {
     @Override
     public boolean equals(final Object o) {
         if (o == this) return true;
-        if (!(o instanceof PostLoginEvent other)) return false;
+        if (!(o instanceof ProxyLoginEvent other)) return false;
         if (!other.canEqual(this)) return false;
         final Object this$player = this.getPlayer();
         final Object other$player = other.getPlayer();
@@ -81,7 +81,7 @@ public class PostLoginEvent extends AbstractEvent {
      * @return the boolean
      */
     protected boolean canEqual(final Object other) {
-        return other instanceof PostLoginEvent;
+        return other instanceof ProxyLoginEvent;
     }
 
     @Override

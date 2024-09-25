@@ -5,10 +5,10 @@ import net.cakemc.de.crycodes.proxy.AbstractProxyService;
 import net.cakemc.de.crycodes.proxy.channel.PlayerChannel;
 import net.cakemc.de.crycodes.proxy.connection.DownstreamBridge;
 import net.cakemc.de.crycodes.proxy.connection.data.CancelSendSignal;
-import net.cakemc.de.crycodes.proxy.events.server.ServerConnectEvent;
-import net.cakemc.de.crycodes.proxy.events.server.ServerConnectedEvent;
-import net.cakemc.de.crycodes.proxy.events.server.ServerKickEvent;
-import net.cakemc.de.crycodes.proxy.events.server.ServerSwitchEvent;
+import net.cakemc.de.crycodes.proxy.events.server.ProxyServerConnectEvent;
+import net.cakemc.de.crycodes.proxy.events.server.ProxyServerConnectedEvent;
+import net.cakemc.de.crycodes.proxy.events.server.ProxyServerKickEvent;
+import net.cakemc.de.crycodes.proxy.events.server.ProxyServerSwitchEvent;
 import net.cakemc.de.crycodes.proxy.network.PacketHandler;
 import net.cakemc.de.crycodes.proxy.network.PacketReader;
 import net.cakemc.de.crycodes.proxy.network.packet.AbstractPacket;
@@ -30,7 +30,7 @@ import java.util.Queue;
 import java.util.UUID;
 
 /**
- * The type Server connector.
+ * The type TargetServer connector.
  */
 public class ServerConnector extends PacketHandler {
     private final AbstractProxyService bungee;
@@ -41,7 +41,7 @@ public class ServerConnector extends PacketHandler {
     private boolean obsolete;
 
     /**
-     * Instantiates a new Server connector.
+     * Instantiates a new TargetServer connector.
      *
      * @param bungee the bungee
      * @param user   the user
@@ -65,8 +65,8 @@ public class ServerConnector extends PacketHandler {
      * @throws Exception the exception
      */
     public static void handleLogin(AbstractProxyService bungee, PlayerChannel ch, ConnectedPlayer user, ProxyTargetImpl target,
-                                   ServerConnection server, PlayerCreationPacket playerCreationPacket) throws Exception {
-        ServerConnectedEvent event = new ServerConnectedEvent(user, server);
+                                   TargetServerConnection server, PlayerCreationPacket playerCreationPacket) throws Exception {
+        ProxyServerConnectedEvent event = new ProxyServerConnectedEvent(user, server);
         bungee.getEventManager().call(event);
         Queue<AbstractPacket> packetQueue = target.getPacketQueue();
         synchronized (packetQueue) {
@@ -157,7 +157,7 @@ public class ServerConnector extends PacketHandler {
     public void handle(ServerGameProfilePacket serverGameProfilePacket) throws Exception {
 
         if (user.getPendingConnection().getVersion() >= ProtocolVersion.MINECRAFT_1_20_2.getProtocolId()) {
-            ServerConnection server = new ServerConnection(ch, target);
+            TargetServerConnection server = new TargetServerConnection(ch, target);
             cutThrough(server);
         } else {
             ch.setProtocol(Protocol.GAME);
@@ -175,12 +175,12 @@ public class ServerConnector extends PacketHandler {
     @Override
     public void handle(PlayerCreationPacket playerCreationPacket) throws Exception {
 
-        ServerConnection server = new ServerConnection(ch, target);
+        TargetServerConnection server = new TargetServerConnection(ch, target);
         handleLogin(bungee, ch, user, target, server, playerCreationPacket);
         cutThrough(server);
     }
 
-    private void cutThrough(ServerConnection server) {
+    private void cutThrough(TargetServerConnection server) {
         if (!user.isActive()) {
             server.disconnect("Quitting");
             return;
@@ -212,20 +212,20 @@ public class ServerConnector extends PacketHandler {
         AbstractTarget from = (user.getServer() == null) ? null : user.getServer().getInfo();
         user.setServer(server);
         ch.getHandle().pipeline().get(PacketReader.class).setHandler(new DownstreamBridge(bungee, user, server));
-        bungee.getEventManager().call(new ServerSwitchEvent(user, from));
+        bungee.getEventManager().call(new ProxyServerSwitchEvent(user, from));
         thisState = State.FINISHED;
         throw CancelSendSignal.INSTANCE;
     }
 
     @Override
     public void handle(EncryptionRequestPacket encryptionRequestPacket) throws Exception {
-        throw new RuntimeException("Server is online mode!");
+        throw new RuntimeException("TargetServer is online mode!");
     }
 
     @Override
     public void handle(DisconnectPacket disconnectPacket) throws Exception {
         AbstractTarget def = user.updateAndGetNextServer(target);
-        ServerKickEvent event = new ServerKickEvent(user, target, new BaseComponent[]{disconnectPacket.getMessage()}, def, ServerKickEvent.State.CONNECTING);
+        ProxyServerKickEvent event = new ProxyServerKickEvent(user, target, new BaseComponent[]{disconnectPacket.getMessage()}, def, ProxyServerKickEvent.State.CONNECTING);
         if (event.getKickReason().toLowerCase(Locale.ROOT).contains("outdated") && def != null) {
             // Pre cancel the event if we are going to try another server
             event.setCancelled(true);
@@ -233,7 +233,7 @@ public class ServerConnector extends PacketHandler {
         bungee.getEventManager().call(event);
         if (event.isCancelled() && event.getCancelServer() != null) {
             obsolete = true;
-            user.connect(event.getCancelServer(), ServerConnectEvent.Reason.KICK_REDIRECT);
+            user.connect(event.getCancelServer(), ConnectionReason.KICK_REDIRECT);
             throw CancelSendSignal.INSTANCE;
         }
         if (user.isDimensionChange()) {

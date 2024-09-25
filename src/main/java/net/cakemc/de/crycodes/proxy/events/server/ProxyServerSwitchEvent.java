@@ -1,25 +1,25 @@
 package net.cakemc.de.crycodes.proxy.events.server;
 
-import net.cakemc.de.crycodes.proxy.player.ProxiedPlayer;
+import net.cakemc.de.crycodes.proxy.player.ProxyPlayer;
 import net.cakemc.de.crycodes.proxy.target.AbstractTarget;
 import net.cakemc.mc.lib.game.event.AbstractEvent;
 
 import java.util.Objects;
 
 /**
- * The type Server switch event.
+ * The type TargetServer switch event.
  */
-public class ServerSwitchEvent extends AbstractEvent {
-    private final ProxiedPlayer player;
+public class ProxyServerSwitchEvent extends AbstractEvent {
+    private final ProxyPlayer player;
     private final AbstractTarget from;
 
     /**
-     * Instantiates a new Server switch event.
+     * Instantiates a new TargetServer switch event.
      *
      * @param player the player
      * @param from   the from
      */
-    public ServerSwitchEvent(final ProxiedPlayer player, final AbstractTarget from) {
+    public ProxyServerSwitchEvent(final ProxyPlayer player, final AbstractTarget from) {
         this.player = player;
         this.from = from;
     }
@@ -29,7 +29,7 @@ public class ServerSwitchEvent extends AbstractEvent {
      *
      * @return the player
      */
-    public ProxiedPlayer getPlayer() {
+    public ProxyPlayer getPlayer() {
         return this.player;
     }
 
@@ -44,13 +44,13 @@ public class ServerSwitchEvent extends AbstractEvent {
 
     @Override
     public String toString() {
-        return "ServerSwitchEvent(player=" + this.getPlayer() + ", from=" + this.getFrom() + ")";
+        return "ProxyServerSwitchEvent(player=" + this.getPlayer() + ", from=" + this.getFrom() + ")";
     }
 
     @Override
     public boolean equals(final Object o) {
         if (o == this) return true;
-        if (!(o instanceof ServerSwitchEvent other)) return false;
+        if (!(o instanceof ProxyServerSwitchEvent other)) return false;
         if (!other.canEqual(this)) return false;
         final Object this$player = this.getPlayer();
         final Object other$player = other.getPlayer();
@@ -67,7 +67,7 @@ public class ServerSwitchEvent extends AbstractEvent {
      * @return the boolean
      */
     protected boolean canEqual(final Object other) {
-        return other instanceof ServerSwitchEvent;
+        return other instanceof ProxyServerSwitchEvent;
     }
 
     @Override

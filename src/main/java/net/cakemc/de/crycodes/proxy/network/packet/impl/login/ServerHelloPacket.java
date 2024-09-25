@@ -10,7 +10,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * The type Server hello packet.
+ * The type TargetServer hello packet.
  */
 public class ServerHelloPacket extends AbstractPacket {
     private String data;
@@ -18,13 +18,13 @@ public class ServerHelloPacket extends AbstractPacket {
     private UUID uuid;
 
     /**
-     * Instantiates a new Server hello packet.
+     * Instantiates a new TargetServer hello packet.
      */
     public ServerHelloPacket() {
     }
 
     /**
-     * Instantiates a new Server hello packet.
+     * Instantiates a new TargetServer hello packet.
      *
      * @param data      the data
      * @param publicKey the public key

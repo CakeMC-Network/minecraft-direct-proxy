@@ -4,8 +4,8 @@ package net.cakemc.de.crycodes.proxy.connection.handler;
 import net.cakemc.de.crycodes.proxy.ProxyServiceImpl;
 import net.cakemc.de.crycodes.proxy.channel.PlayerChannel;
 import net.cakemc.de.crycodes.proxy.connection.UpstreamBridge;
-import net.cakemc.de.crycodes.proxy.events.connect.PostLoginEvent;
-import net.cakemc.de.crycodes.proxy.events.server.ServerConnectEvent;
+import net.cakemc.de.crycodes.proxy.events.connect.ProxyLoginEvent;
+import net.cakemc.de.crycodes.proxy.events.server.ProxyServerConnectEvent;
 import net.cakemc.de.crycodes.proxy.network.PacketHandler;
 import net.cakemc.de.crycodes.proxy.network.PacketReader;
 import net.cakemc.de.crycodes.proxy.network.PipelineUtils;
@@ -18,10 +18,11 @@ import net.cakemc.de.crycodes.proxy.network.packet.impl.login.*;
 import net.cakemc.de.crycodes.proxy.network.packet.impl.status.StatusRequestPacket;
 import net.cakemc.de.crycodes.proxy.player.ConnectedPlayer;
 import net.cakemc.de.crycodes.proxy.player.PendingConnection;
-import net.cakemc.de.crycodes.proxy.player.ProxiedPlayer;
+import net.cakemc.de.crycodes.proxy.player.ProxyPlayer;
 import net.cakemc.de.crycodes.proxy.protocol.Protocol;
 import net.cakemc.de.crycodes.proxy.protocol.ProtocolVersion;
 import net.cakemc.de.crycodes.proxy.target.AbstractTarget;
+import net.cakemc.de.crycodes.proxy.target.ConnectionReason;
 import net.cakemc.de.crycodes.proxy.units.ProxyServiceAddress;
 import net.cakemc.mc.lib.game.PlayerProfile;
 import net.cakemc.mc.lib.game.text.test.api.chat.BaseComponent;
@@ -212,12 +213,12 @@ public class ProxyLoginHandler extends PacketHandler implements PendingConnectio
     }
 
     private void finish() {
-        ProxiedPlayer oldName = service.getPlayer(getName());
+        ProxyPlayer oldName = service.getPlayer(getName());
         if (oldName != null) {
             disconnect("already connected to this proxy instance");
             return;
         }
-        ProxiedPlayer oldID = service.getPlayer(getUniqueId());
+        ProxyPlayer oldID = service.getPlayer(getUniqueId());
         if (oldID != null) {
             disconnect("already connected to this proxy instance");
             return;
@@ -253,7 +254,7 @@ public class ProxyLoginHandler extends PacketHandler implements PendingConnectio
 
         AbstractTarget initialServer = service.getDefaultTarget();
 
-        PostLoginEvent loginEvent = new PostLoginEvent(userCon, initialServer);
+        ProxyLoginEvent loginEvent = new ProxyLoginEvent(userCon, initialServer);
 
         // fire post-login event
         service.getEventManager().call(loginEvent);
@@ -261,7 +262,7 @@ public class ProxyLoginHandler extends PacketHandler implements PendingConnectio
         if (channel.isClosing()) {
             return;
         }
-        userCon.connect(loginEvent.getTarget(), null, true, ServerConnectEvent.Reason.JOIN_PROXY);
+        userCon.connect(loginEvent.getTarget(), null, ConnectionReason.JOIN_PROXY);
     }
 
     public void sendPacket(AbstractPacket packet) {

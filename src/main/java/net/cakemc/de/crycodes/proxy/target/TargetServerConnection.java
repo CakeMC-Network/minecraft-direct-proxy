@@ -13,9 +13,9 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
- * The type Server connection.
+ * The type TargetServer connection.
  */
-public class ServerConnection implements Server {
+public class TargetServerConnection implements TargetServer {
 
     private final PlayerChannel ch;
     private final ProxyTargetImpl info;
@@ -25,12 +25,12 @@ public class ServerConnection implements Server {
     private boolean isObsolete;
 
     /**
-     * Instantiates a new Server connection.
+     * Instantiates a new TargetServer connection.
      *
      * @param ch   the ch
      * @param info the info
      */
-    public ServerConnection(final PlayerChannel ch, final ProxyTargetImpl info) {
+    public TargetServerConnection(final PlayerChannel ch, final ProxyTargetImpl info) {
         this.ch = ch;
         this.info = info;
     }
@@ -196,7 +196,7 @@ public class ServerConnection implements Server {
          * @return the boolean
          */
         protected boolean canEqual(final Object other) {
-            return other instanceof ServerConnection.KeepAliveData;
+            return other instanceof TargetServerConnection.KeepAliveData;
         }
 
         @Override
@@ -212,7 +212,7 @@ public class ServerConnection implements Server {
 
         @Override
         public String toString() {
-            return "ServerConnection.KeepAliveData(id=" + this.getId() + ", time=" + this.getTime() + ")";
+            return "TargetServerConnection.KeepAliveData(id=" + this.getId() + ", time=" + this.getTime() + ")";
         }
     }
 }

@@ -5,8 +5,8 @@ import io.netty.channel.Channel;
 import net.cakemc.de.crycodes.proxy.AbstractProxyService;
 import net.cakemc.de.crycodes.proxy.channel.PlayerChannel;
 import net.cakemc.de.crycodes.proxy.connection.data.CancelSendSignal;
-import net.cakemc.de.crycodes.proxy.events.SettingsChangedEvent;
-import net.cakemc.de.crycodes.proxy.events.connect.PlayerDisconnectEvent;
+import net.cakemc.de.crycodes.proxy.events.ProxySettingsChangedEvent;
+import net.cakemc.de.crycodes.proxy.events.connect.ProxyPlayerDisconnectEvent;
 import net.cakemc.de.crycodes.proxy.network.PacketHandler;
 import net.cakemc.de.crycodes.proxy.network.packet.ProtocolPacket;
 import net.cakemc.de.crycodes.proxy.network.packet.impl.ClientSettingsPacket;
@@ -16,8 +16,8 @@ import net.cakemc.de.crycodes.proxy.network.packet.impl.StartConfigurationPacket
 import net.cakemc.de.crycodes.proxy.network.packet.impl.login.ServerLoginAcknowledgedPacket;
 import net.cakemc.de.crycodes.proxy.player.ConnectedPlayer;
 import net.cakemc.de.crycodes.proxy.protocol.Protocol;
-import net.cakemc.de.crycodes.proxy.target.ServerConnection;
-import net.cakemc.de.crycodes.proxy.target.ServerConnection.KeepAliveData;
+import net.cakemc.de.crycodes.proxy.target.TargetServerConnection;
+import net.cakemc.de.crycodes.proxy.target.TargetServerConnection.KeepAliveData;
 
 /**
  * The type Upstream bridge.
@@ -46,7 +46,7 @@ public class UpstreamBridge extends PacketHandler {
     @Override
     public void disconnected(PlayerChannel channel) throws Exception {
         // We lost connection to the client
-        PlayerDisconnectEvent event = new PlayerDisconnectEvent(con);
+        ProxyPlayerDisconnectEvent event = new ProxyPlayerDisconnectEvent(con);
         abstractProxyService.getEventManager().call(event);
         abstractProxyService.removeConnection(con);
 
@@ -70,7 +70,7 @@ public class UpstreamBridge extends PacketHandler {
 
     @Override
     public void handle(ProtocolPacket packet) throws Exception {
-        ServerConnection server = con.getServer();
+        TargetServerConnection server = con.getServer();
         if (server != null && server.isConnected()) {
             Protocol serverEncode = server.getCh().getEncodeProtocol();
             // #3527: May still have old packets from client in game state when switching server to configuration state - discard those
@@ -99,7 +99,7 @@ public class UpstreamBridge extends PacketHandler {
     public void handle(ClientSettingsPacket settings) throws Exception {
         con.setSettings(settings);
 
-        SettingsChangedEvent settingsEvent = new SettingsChangedEvent(con);
+        ProxySettingsChangedEvent settingsEvent = new ProxySettingsChangedEvent(con);
         abstractProxyService.getEventManager().call(settingsEvent);
     }
 

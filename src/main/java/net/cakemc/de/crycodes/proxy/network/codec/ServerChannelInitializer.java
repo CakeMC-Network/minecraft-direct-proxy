@@ -5,7 +5,7 @@ import io.netty.channel.ChannelInitializer;
 import net.cakemc.de.crycodes.proxy.AbstractProxyService;
 import net.cakemc.de.crycodes.proxy.ProxyServiceImpl;
 import net.cakemc.de.crycodes.proxy.connection.handler.ProxyLoginHandler;
-import net.cakemc.de.crycodes.proxy.events.connect.PlayerConnectEvent;
+import net.cakemc.de.crycodes.proxy.events.connect.ProxyPlayerConnectToServerEvent;
 import net.cakemc.de.crycodes.proxy.network.PacketReader;
 import net.cakemc.de.crycodes.proxy.network.codec.minecraft.MinecraftDecoder;
 import net.cakemc.de.crycodes.proxy.network.codec.minecraft.MinecraftEncoder;
@@ -17,14 +17,14 @@ import java.net.SocketAddress;
 import static net.cakemc.de.crycodes.proxy.network.PipelineUtils.*;
 
 /**
- * The type Server channel initializer.
+ * The type TargetServer channel initializer.
  */
 public class ServerChannelInitializer extends ChannelInitializer<Channel> {
 
     private final AbstractProxyService proxyService;
 
     /**
-     * Instantiates a new Server channel initializer.
+     * Instantiates a new TargetServer channel initializer.
      *
      * @param proxyService the proxy service
      */
@@ -38,9 +38,9 @@ public class ServerChannelInitializer extends ChannelInitializer<Channel> {
 
         ProxyServiceAddress listener = ch.attr(LISTENER).get();
 
-        PlayerConnectEvent PLayerConnectEvent = new PlayerConnectEvent(remoteAddress, listener);
-        proxyService.getEventManager().call(PLayerConnectEvent);
-        if (PLayerConnectEvent.isCancelled()) {
+        ProxyPlayerConnectToServerEvent PLayerConnectEventProxy = new ProxyPlayerConnectToServerEvent(remoteAddress, listener);
+        proxyService.getEventManager().call(PLayerConnectEventProxy);
+        if (PLayerConnectEventProxy.isCancelled()) {
             ch.close();
             return;
         }

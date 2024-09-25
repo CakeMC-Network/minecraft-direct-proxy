@@ -1,7 +1,7 @@
 package net.cakemc.de.crycodes.proxy.target;
 
 import net.cakemc.de.crycodes.proxy.connection.ConnectionListener;
-import net.cakemc.de.crycodes.proxy.events.server.ServerConnectEvent;
+import net.cakemc.de.crycodes.proxy.events.server.ProxyServerConnectEvent;
 
 
 /**
@@ -9,7 +9,7 @@ import net.cakemc.de.crycodes.proxy.events.server.ServerConnectEvent;
  */
 public class TargetRequest {
     private final AbstractTarget target;
-    private final ServerConnectEvent.Reason reason;
+    private final ConnectionReason reason;
     private final ConnectionListener<Result> connectionListener;
     private int connectTimeout;
     private boolean retry;
@@ -21,7 +21,7 @@ public class TargetRequest {
      * @param reason             the reason
      * @param connectionListener the connection listener
      */
-    public TargetRequest(AbstractTarget target, ServerConnectEvent.Reason reason, ConnectionListener<Result> connectionListener) {
+    public TargetRequest(AbstractTarget target, ConnectionReason reason, ConnectionListener<Result> connectionListener) {
         this.target = target;
         this.reason = reason;
         this.connectionListener = connectionListener;
@@ -41,7 +41,7 @@ public class TargetRequest {
      *
      * @return the reason
      */
-    public ServerConnectEvent.Reason getReason() {
+    public ConnectionReason getReason() {
         return this.reason;
     }
 

@@ -95,7 +95,7 @@ public class CryptUnits {
             digest.update(publicKey.getEncoded());
             return new BigInteger(digest.digest()).toString(16);
         } catch (NoSuchAlgorithmException e) {
-            throw new IllegalStateException("Server ID hash algorithm unavailable.", e);
+            throw new IllegalStateException("TargetServer ID hash algorithm unavailable.", e);
         }
     }
 

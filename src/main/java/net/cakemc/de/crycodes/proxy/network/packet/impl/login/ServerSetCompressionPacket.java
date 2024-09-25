@@ -6,19 +6,19 @@ import net.cakemc.de.crycodes.proxy.network.packet.AbstractPacketHandler;
 import net.cakemc.de.crycodes.proxy.protocol.ProtocolVersion;
 
 /**
- * The type Server set compression packet.
+ * The type TargetServer set compression packet.
  */
 public class ServerSetCompressionPacket extends AbstractPacket {
     private int threshold;
 
     /**
-     * Instantiates a new Server set compression packet.
+     * Instantiates a new TargetServer set compression packet.
      */
     public ServerSetCompressionPacket() {
     }
 
     /**
-     * Instantiates a new Server set compression packet.
+     * Instantiates a new TargetServer set compression packet.
      *
      * @param threshold the threshold
      */

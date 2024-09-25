@@ -7,11 +7,11 @@ import net.cakemc.de.crycodes.proxy.protocol.Protocol;
 import net.cakemc.de.crycodes.proxy.protocol.ProtocolVersion;
 
 /**
- * The type Server login acknowledged packet.
+ * The type TargetServer login acknowledged packet.
  */
 public class ServerLoginAcknowledgedPacket extends AbstractPacket {
     /**
-     * Instantiates a new Server login acknowledged packet.
+     * Instantiates a new TargetServer login acknowledged packet.
      */
     public ServerLoginAcknowledgedPacket() {
     }

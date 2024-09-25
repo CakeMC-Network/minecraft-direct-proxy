@@ -1,22 +1,22 @@
-package net.cakemc.de.crycodes.proxy.events;
+package net.cakemc.de.crycodes.proxy.events.connect;
 
-import net.cakemc.de.crycodes.proxy.player.ProxiedPlayer;
+import net.cakemc.de.crycodes.proxy.player.ProxyPlayer;
 import net.cakemc.mc.lib.game.event.AbstractEvent;
 
 import java.util.Objects;
 
 /**
- * The type Settings changed event.
+ * The type Player disconnect event.
  */
-public class SettingsChangedEvent extends AbstractEvent {
-    private final ProxiedPlayer player;
+public class ProxyPlayerDisconnectEvent extends AbstractEvent {
+    private final ProxyPlayer player;
 
     /**
-     * Instantiates a new Settings changed event.
+     * Instantiates a new Player disconnect event.
      *
      * @param player the player
      */
-    public SettingsChangedEvent(final ProxiedPlayer player) {
+    public ProxyPlayerDisconnectEvent(final ProxyPlayer player) {
         this.player = player;
     }
 
@@ -25,19 +25,19 @@ public class SettingsChangedEvent extends AbstractEvent {
      *
      * @return the player
      */
-    public ProxiedPlayer getPlayer() {
+    public ProxyPlayer getPlayer() {
         return this.player;
     }
 
     @Override
     public String toString() {
-        return "SettingsChangedEvent(player=" + this.getPlayer() + ")";
+        return "ProxyPlayerDisconnectEvent(player=" + this.getPlayer() + ")";
     }
 
     @Override
     public boolean equals(final Object o) {
         if (o == this) return true;
-        if (!(o instanceof SettingsChangedEvent other)) return false;
+        if (!(o instanceof ProxyPlayerDisconnectEvent other)) return false;
         if (!other.canEqual(this)) return false;
         final Object this$player = this.getPlayer();
         final Object other$player = other.getPlayer();
@@ -51,12 +51,7 @@ public class SettingsChangedEvent extends AbstractEvent {
      * @return the boolean
      */
     protected boolean canEqual(final Object other) {
-        return other instanceof SettingsChangedEvent;
-    }
-
-    @Override
-    public String getName() {
-        return "";
+        return other instanceof ProxyPlayerDisconnectEvent;
     }
 
     @Override
@@ -66,5 +61,10 @@ public class SettingsChangedEvent extends AbstractEvent {
         final Object $player = this.getPlayer();
         result = result * PRIME + ($player == null ? 43 : $player.hashCode());
         return result;
+    }
+
+    @Override
+    public String getName() {
+        return "";
     }
 }

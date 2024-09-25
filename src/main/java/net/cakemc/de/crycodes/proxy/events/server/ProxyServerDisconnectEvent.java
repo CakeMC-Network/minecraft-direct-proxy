@@ -1,29 +1,29 @@
 package net.cakemc.de.crycodes.proxy.events.server;
 
 
-import net.cakemc.de.crycodes.proxy.player.ProxiedPlayer;
+import net.cakemc.de.crycodes.proxy.player.ProxyPlayer;
 import net.cakemc.de.crycodes.proxy.target.AbstractTarget;
 import net.cakemc.mc.lib.game.event.AbstractEvent;
 
 import java.util.Objects;
 
 /**
- * The type Server disconnect event.
+ * The type TargetServer disconnect event.
  */
-public class ServerDisconnectEvent extends AbstractEvent {
+public class ProxyServerDisconnectEvent extends AbstractEvent {
 
-    private final ProxiedPlayer player;
+    private final ProxyPlayer player;
 
     private final AbstractTarget target;
 
 
     /**
-     * Instantiates a new Server disconnect event.
+     * Instantiates a new TargetServer disconnect event.
      *
      * @param player the player
      * @param target the target
      */
-    public ServerDisconnectEvent(final ProxiedPlayer player, final AbstractTarget target) {
+    public ProxyServerDisconnectEvent(final ProxyPlayer player, final AbstractTarget target) {
         if (player == null) {
             throw new NullPointerException("player is marked non-null but is null");
         }
@@ -39,7 +39,7 @@ public class ServerDisconnectEvent extends AbstractEvent {
      *
      * @return the player
      */
-    public ProxiedPlayer getPlayer() {
+    public ProxyPlayer getPlayer() {
         return this.player;
     }
 
@@ -54,13 +54,13 @@ public class ServerDisconnectEvent extends AbstractEvent {
 
     @Override
     public String toString() {
-        return "ServerDisconnectEvent(player=" + this.getPlayer() + ", target=" + this.getTarget() + ")";
+        return "ProxyServerDisconnectEvent(player=" + this.getPlayer() + ", target=" + this.getTarget() + ")";
     }
 
     @Override
     public boolean equals(final Object o) {
         if (o == this) return true;
-        if (!(o instanceof ServerDisconnectEvent other)) return false;
+        if (!(o instanceof ProxyServerDisconnectEvent other)) return false;
         if (!other.canEqual(this)) return false;
         final Object this$player = this.getPlayer();
         final Object other$player = other.getPlayer();
@@ -77,7 +77,7 @@ public class ServerDisconnectEvent extends AbstractEvent {
      * @return the boolean
      */
     protected boolean canEqual(final Object other) {
-        return other instanceof ServerDisconnectEvent;
+        return other instanceof ProxyServerDisconnectEvent;
     }
 
     @Override

@@ -1,9 +1,10 @@
 package net.cakemc.de.crycodes.proxy.player;
 
 import net.cakemc.de.crycodes.proxy.connection.ConnectionListener;
-import net.cakemc.de.crycodes.proxy.events.server.ServerConnectEvent;
+import net.cakemc.de.crycodes.proxy.events.server.ProxyServerConnectEvent;
 import net.cakemc.de.crycodes.proxy.target.AbstractTarget;
-import net.cakemc.de.crycodes.proxy.target.Server;
+import net.cakemc.de.crycodes.proxy.target.ConnectionReason;
+import net.cakemc.de.crycodes.proxy.target.TargetServer;
 import net.cakemc.de.crycodes.proxy.target.TargetRequest;
 import net.cakemc.mc.lib.game.text.test.api.ChatMessageType;
 import net.cakemc.mc.lib.game.text.test.api.chat.BaseComponent;
@@ -15,7 +16,7 @@ import java.util.UUID;
 /**
  * The interface Proxied player.
  */
-public interface ProxiedPlayer extends Connection {
+public interface ProxyPlayer extends Connection {
 
     /**
      * Gets display name.
@@ -104,7 +105,7 @@ public interface ProxiedPlayer extends Connection {
      * @param target the target
      * @param reason the reason
      */
-    void connect(AbstractTarget target, ServerConnectEvent.Reason reason);
+    void connect(AbstractTarget target, ConnectionReason reason);
 
     /**
      * Connect.
@@ -121,7 +122,7 @@ public interface ProxiedPlayer extends Connection {
      * @param connectionListener the connection listener
      * @param reason             the reason
      */
-    void connect(AbstractTarget target, ConnectionListener<Boolean> connectionListener, ServerConnectEvent.Reason reason);
+    void connect(AbstractTarget target, ConnectionListener<Boolean> connectionListener, ConnectionReason reason);
 
     /**
      * Connect.
@@ -135,7 +136,7 @@ public interface ProxiedPlayer extends Connection {
      *
      * @return the server
      */
-    Server getServer();
+    TargetServer getServer();
 
     /**
      * Gets ping.
@@ -170,7 +171,6 @@ public interface ProxiedPlayer extends Connection {
      *
      * @return the uuid
      */
-    @Deprecated
     String getUUID();
 
     /**

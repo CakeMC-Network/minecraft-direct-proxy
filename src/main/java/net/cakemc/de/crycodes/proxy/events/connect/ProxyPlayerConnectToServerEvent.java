@@ -10,7 +10,7 @@ import java.util.Objects;
 /**
  * The type Player connect event.
  */
-public class PlayerConnectEvent extends AbstractEvent implements Cancelable {
+public class ProxyPlayerConnectToServerEvent extends AbstractEvent implements Cancelable {
     private final SocketAddress socketAddress;
     private final ProxyServiceAddress listener;
     private boolean cancelled;
@@ -21,7 +21,7 @@ public class PlayerConnectEvent extends AbstractEvent implements Cancelable {
      * @param socketAddress the socket address
      * @param listener      the listener
      */
-    public PlayerConnectEvent(final SocketAddress socketAddress, final ProxyServiceAddress listener) {
+    public ProxyPlayerConnectToServerEvent(final SocketAddress socketAddress, final ProxyServiceAddress listener) {
         this.socketAddress = socketAddress;
         this.listener = listener;
     }
@@ -70,7 +70,7 @@ public class PlayerConnectEvent extends AbstractEvent implements Cancelable {
     @Override
     public boolean equals(final Object o) {
         if (o == this) return true;
-        if (!(o instanceof PlayerConnectEvent other)) return false;
+        if (!(o instanceof ProxyPlayerConnectToServerEvent other)) return false;
         if (!other.canEqual(this)) return false;
         if (this.isCancelled() != other.isCancelled()) return false;
         final Object this$socketAddress = this.getSocketAddress();
@@ -89,7 +89,7 @@ public class PlayerConnectEvent extends AbstractEvent implements Cancelable {
      * @return the boolean
      */
     protected boolean canEqual(final Object other) {
-        return other instanceof PlayerConnectEvent;
+        return other instanceof ProxyPlayerConnectToServerEvent;
     }
 
     @Override

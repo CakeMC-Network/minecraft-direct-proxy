@@ -4,17 +4,18 @@ package net.cakemc.de.crycodes.proxy.connection;
 import net.cakemc.de.crycodes.proxy.AbstractProxyService;
 import net.cakemc.de.crycodes.proxy.channel.PlayerChannel;
 import net.cakemc.de.crycodes.proxy.connection.data.CancelSendSignal;
-import net.cakemc.de.crycodes.proxy.events.server.ServerConnectEvent;
-import net.cakemc.de.crycodes.proxy.events.server.ServerDisconnectEvent;
-import net.cakemc.de.crycodes.proxy.events.server.ServerKickEvent;
+import net.cakemc.de.crycodes.proxy.events.server.ProxyServerConnectEvent;
+import net.cakemc.de.crycodes.proxy.events.server.ProxyServerDisconnectEvent;
+import net.cakemc.de.crycodes.proxy.events.server.ProxyServerKickEvent;
 import net.cakemc.de.crycodes.proxy.network.PacketHandler;
 import net.cakemc.de.crycodes.proxy.network.packet.ProtocolPacket;
 import net.cakemc.de.crycodes.proxy.network.packet.impl.*;
 import net.cakemc.de.crycodes.proxy.network.packet.impl.login.ServerSetCompressionPacket;
 import net.cakemc.de.crycodes.proxy.player.ConnectedPlayer;
 import net.cakemc.de.crycodes.proxy.target.AbstractTarget;
-import net.cakemc.de.crycodes.proxy.target.ServerConnection;
-import net.cakemc.de.crycodes.proxy.target.ServerConnection.KeepAliveData;
+import net.cakemc.de.crycodes.proxy.target.ConnectionReason;
+import net.cakemc.de.crycodes.proxy.target.TargetServerConnection;
+import net.cakemc.de.crycodes.proxy.target.TargetServerConnection.KeepAliveData;
 import net.cakemc.de.crycodes.proxy.target.ServerConnector;
 import net.cakemc.mc.lib.game.text.test.api.chat.BaseComponent;
 
@@ -24,7 +25,7 @@ import net.cakemc.mc.lib.game.text.test.api.chat.BaseComponent;
 public class DownstreamBridge extends PacketHandler {
     private final AbstractProxyService bungee;
     private final ConnectedPlayer con;
-    private final ServerConnection server;
+    private final TargetServerConnection server;
     private boolean receivedLogin;
 
     /**
@@ -34,7 +35,7 @@ public class DownstreamBridge extends PacketHandler {
      * @param con    the con
      * @param server the server
      */
-    public DownstreamBridge(final AbstractProxyService bungee, final ConnectedPlayer con, final ServerConnection server) {
+    public DownstreamBridge(final AbstractProxyService bungee, final ConnectedPlayer con, final TargetServerConnection server) {
         this.bungee = bungee;
         this.con = con;
         this.server = server;
@@ -49,7 +50,7 @@ public class DownstreamBridge extends PacketHandler {
         AbstractTarget def = con.updateAndGetNextServer(server.getInfo());
         if (def != null) {
             server.setObsolete(true);
-            con.connectNow(def, ServerConnectEvent.Reason.SERVER_DOWN_REDIRECT);
+            con.connectNow(def, ConnectionReason.SERVER_DOWN_REDIRECT);
             con.sendMessage("service '%s' closed.".formatted(def.getName()));
         } else {
             con.disconnect(t.getMessage());
@@ -61,8 +62,8 @@ public class DownstreamBridge extends PacketHandler {
         // We lost connection to the server
         server.getInfo().removePlayer(con);
 
-        ServerDisconnectEvent serverDisconnectEvent = new ServerDisconnectEvent(con, server.getInfo());
-        bungee.getEventManager().call(serverDisconnectEvent);
+        ProxyServerDisconnectEvent proxyServerDisconnectEvent = new ProxyServerDisconnectEvent(con, server.getInfo());
+        bungee.getEventManager().call(proxyServerDisconnectEvent);
         if (server.isObsolete()) {
             // do not perform any actions if the user has already moved
             return;
@@ -70,7 +71,7 @@ public class DownstreamBridge extends PacketHandler {
         AbstractTarget def = con.updateAndGetNextServer(server.getInfo());
         if (def != null) {
             server.setObsolete(true);
-            con.connectNow(def, ServerConnectEvent.Reason.SERVER_DOWN_REDIRECT);
+            con.connectNow(def, ConnectionReason.SERVER_DOWN_REDIRECT);
             con.sendMessage("service '%s' closed.".formatted(def.getName()));
         } else {
             con.disconnect("lost connection to service.");
@@ -99,13 +100,13 @@ public class DownstreamBridge extends PacketHandler {
     @Override
     public void handle(DisconnectPacket disconnectPacket) throws Exception {
         AbstractTarget def = con.updateAndGetNextServer(server.getInfo());
-        ServerKickEvent event = (new ServerKickEvent(con, server.getInfo(), new BaseComponent[]
-                {disconnectPacket.getMessage()}, def, ServerKickEvent.State.CONNECTED));
+        ProxyServerKickEvent event = (new ProxyServerKickEvent(con, server.getInfo(), new BaseComponent[]
+                {disconnectPacket.getMessage()}, def, ProxyServerKickEvent.State.CONNECTED));
 
         bungee.getEventManager().call(event);
 
         if (event.isCancelled() && event.getCancelServer() != null) {
-            con.connectNow(event.getCancelServer(), ServerConnectEvent.Reason.KICK_REDIRECT);
+            con.connectNow(event.getCancelServer(), ConnectionReason.KICK_REDIRECT);
         } else {
             con.disconnect(event.getKickReasonComponent()); // TODO: Prefix our own stuff.
         }

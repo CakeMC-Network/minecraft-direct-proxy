@@ -16,7 +16,6 @@ public interface Connection {
      *
      * @return the address
      */
-    @Deprecated
     InetSocketAddress getAddress();
 
     /**
@@ -31,7 +30,6 @@ public interface Connection {
      *
      * @param reason the reason
      */
-    @Deprecated
     void disconnect(String reason);
 
     /**

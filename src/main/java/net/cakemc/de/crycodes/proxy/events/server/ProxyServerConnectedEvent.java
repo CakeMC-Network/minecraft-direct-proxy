@@ -1,27 +1,27 @@
 package net.cakemc.de.crycodes.proxy.events.server;
 
-import net.cakemc.de.crycodes.proxy.player.ProxiedPlayer;
-import net.cakemc.de.crycodes.proxy.target.Server;
+import net.cakemc.de.crycodes.proxy.player.ProxyPlayer;
+import net.cakemc.de.crycodes.proxy.target.TargetServer;
 import net.cakemc.mc.lib.game.event.AbstractEvent;
 
 import java.util.Objects;
 
 /**
- * The type Server connected event.
+ * The type TargetServer connected event.
  */
-public class ServerConnectedEvent extends AbstractEvent {
-    private final ProxiedPlayer player;
-    private final Server server;
+public class ProxyServerConnectedEvent extends AbstractEvent {
+    private final ProxyPlayer player;
+    private final TargetServer targetServer;
 
     /**
-     * Instantiates a new Server connected event.
+     * Instantiates a new TargetServer connected event.
      *
      * @param player the player
-     * @param server the server
+     * @param targetServer the targetServer
      */
-    public ServerConnectedEvent(final ProxiedPlayer player, final Server server) {
+    public ProxyServerConnectedEvent(final ProxyPlayer player, final TargetServer targetServer) {
         this.player = player;
-        this.server = server;
+        this.targetServer = targetServer;
     }
 
     /**
@@ -29,28 +29,28 @@ public class ServerConnectedEvent extends AbstractEvent {
      *
      * @return the player
      */
-    public ProxiedPlayer getPlayer() {
+    public ProxyPlayer getPlayer() {
         return this.player;
     }
 
     /**
-     * Gets server.
+     * Gets targetServer.
      *
-     * @return the server
+     * @return the targetServer
      */
-    public Server getServer() {
-        return this.server;
+    public TargetServer getServer() {
+        return this.targetServer;
     }
 
     @Override
     public String toString() {
-        return "ServerConnectedEvent(player=" + this.getPlayer() + ", server=" + this.getServer() + ")";
+        return "ProxyServerConnectedEvent(player=" + this.getPlayer() + ", targetServer=" + this.getServer() + ")";
     }
 
     @Override
     public boolean equals(final Object o) {
         if (o == this) return true;
-        if (!(o instanceof ServerConnectedEvent other)) return false;
+        if (!(o instanceof ProxyServerConnectedEvent other)) return false;
         if (!other.canEqual(this)) return false;
         final Object this$player = this.getPlayer();
         final Object other$player = other.getPlayer();
@@ -67,7 +67,7 @@ public class ServerConnectedEvent extends AbstractEvent {
      * @return the boolean
      */
     protected boolean canEqual(final Object other) {
-        return other instanceof ServerConnectedEvent;
+        return other instanceof ProxyServerConnectedEvent;
     }
 
     @Override

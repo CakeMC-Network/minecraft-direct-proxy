@@ -1,12 +1,11 @@
 package net.cakemc.de.crycodes.proxy;
 
 import net.cakemc.de.crycodes.proxy.player.ConnectedPlayer;
-import net.cakemc.de.crycodes.proxy.player.ProxiedPlayer;
+import net.cakemc.de.crycodes.proxy.player.ProxyPlayer;
 import net.cakemc.de.crycodes.proxy.protocol.ProtocolVersion;
 import net.cakemc.de.crycodes.proxy.target.AbstractTarget;
 import net.cakemc.de.crycodes.proxy.target.ProxyTargetImpl;
 import net.cakemc.mc.lib.game.event.EventManager;
-import net.cakemc.screensystem.ScreenAbleObject;
 import net.cakemc.screensystem.logging.Logger;
 import net.cakemc.screensystem.logging.ServiceLogger;
 
@@ -95,7 +94,7 @@ public class ProxyServiceImpl extends AbstractProxyService {
     }
 
     @Override
-    public List<? extends ProxiedPlayer> getPlayers() {
+    public List<? extends ProxyPlayer> getPlayers() {
         return connections;
     }
 
@@ -105,12 +104,12 @@ public class ProxyServiceImpl extends AbstractProxyService {
     }
 
     @Override
-    public ProxiedPlayer getPlayer(String name) {
+    public ProxyPlayer getPlayer(String name) {
         return connections.stream().filter(userConnection -> userConnection.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
     }
 
     @Override
-    public ProxiedPlayer getPlayer(UUID uuid) {
+    public ProxyPlayer getPlayer(UUID uuid) {
         return connections.stream().filter(userConnection -> userConnection.getUniqueId().equals(uuid)).findFirst().orElse(null);
     }
 

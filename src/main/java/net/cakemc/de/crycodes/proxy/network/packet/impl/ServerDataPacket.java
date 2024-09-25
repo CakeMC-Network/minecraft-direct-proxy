@@ -9,7 +9,7 @@ import net.cakemc.mc.lib.game.text.test.api.chat.BaseComponent;
 import java.util.Objects;
 
 /**
- * The type Server data packet.
+ * The type TargetServer data packet.
  */
 public class ServerDataPacket extends AbstractPacket {
     private BaseComponent motd;
@@ -18,13 +18,13 @@ public class ServerDataPacket extends AbstractPacket {
     private boolean enforceSecure;
 
     /**
-     * Instantiates a new Server data packet.
+     * Instantiates a new TargetServer data packet.
      */
     public ServerDataPacket() {
     }
 
     /**
-     * Instantiates a new Server data packet.
+     * Instantiates a new TargetServer data packet.
      *
      * @param motd          the motd
      * @param icon          the icon

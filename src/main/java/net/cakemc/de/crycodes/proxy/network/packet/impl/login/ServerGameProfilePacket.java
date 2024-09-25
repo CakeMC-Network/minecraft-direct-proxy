@@ -10,7 +10,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * The type Server game profile packet.
+ * The type TargetServer game profile packet.
  */
 public class ServerGameProfilePacket extends AbstractPacket {
     private UUID uuid;
@@ -18,13 +18,13 @@ public class ServerGameProfilePacket extends AbstractPacket {
     private PlayerProfile.Property[] properties;
 
     /**
-     * Instantiates a new Server game profile packet.
+     * Instantiates a new TargetServer game profile packet.
      */
     public ServerGameProfilePacket() {
     }
 
     /**
-     * Instantiates a new Server game profile packet.
+     * Instantiates a new TargetServer game profile packet.
      *
      * @param uuid       the uuid
      * @param username   the username

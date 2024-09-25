@@ -8,20 +8,20 @@ import net.cakemc.de.crycodes.proxy.protocol.ProtocolVersion;
 import java.util.Objects;
 
 /**
- * The type Server transfer packet.
+ * The type TargetServer transfer packet.
  */
 public class ServerTransferPacket extends AbstractPacket {
     private String host;
     private int port;
 
     /**
-     * Instantiates a new Server transfer packet.
+     * Instantiates a new TargetServer transfer packet.
      */
     public ServerTransferPacket() {
     }
 
     /**
-     * Instantiates a new Server transfer packet.
+     * Instantiates a new TargetServer transfer packet.
      *
      * @param host the host
      * @param port the port

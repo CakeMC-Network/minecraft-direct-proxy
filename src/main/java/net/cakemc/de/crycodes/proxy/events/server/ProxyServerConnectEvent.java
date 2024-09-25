@@ -1,8 +1,9 @@
 package net.cakemc.de.crycodes.proxy.events.server;
 
 
-import net.cakemc.de.crycodes.proxy.player.ProxiedPlayer;
+import net.cakemc.de.crycodes.proxy.player.ProxyPlayer;
 import net.cakemc.de.crycodes.proxy.target.AbstractTarget;
+import net.cakemc.de.crycodes.proxy.target.ConnectionReason;
 import net.cakemc.de.crycodes.proxy.target.TargetRequest;
 import net.cakemc.mc.lib.game.event.AbstractEvent;
 import net.cakemc.mc.lib.game.event.Cancelable;
@@ -10,48 +11,46 @@ import net.cakemc.mc.lib.game.event.Cancelable;
 import java.util.Objects;
 
 /**
- * The type Server connect event.
+ * The type TargetServer connect event.
  */
-public class ServerConnectEvent extends AbstractEvent implements Cancelable {
-    private final ProxiedPlayer player;
-    private final Reason reason;
+public class ProxyServerConnectEvent extends AbstractEvent implements Cancelable {
+    private final ProxyPlayer player;
+    private final ConnectionReason reason;
     private final TargetRequest request;
 
     private AbstractTarget target;
     private boolean cancelled;
 
     /**
-     * Instantiates a new Server connect event.
+     * Instantiates a new TargetServer connect event.
      *
      * @param player the player
      * @param target the target
      */
-    @Deprecated
-    public ServerConnectEvent(ProxiedPlayer player, AbstractTarget target) {
-        this(player, target, Reason.UNKNOWN);
+    public ProxyServerConnectEvent(ProxyPlayer player, AbstractTarget target) {
+        this(player, target, ConnectionReason.UNKNOWN);
     }
 
     /**
-     * Instantiates a new Server connect event.
+     * Instantiates a new TargetServer connect event.
      *
      * @param player the player
      * @param target the target
      * @param reason the reason
      */
-    @Deprecated
-    public ServerConnectEvent(ProxiedPlayer player, AbstractTarget target, Reason reason) {
+    public ProxyServerConnectEvent(ProxyPlayer player, AbstractTarget target, ConnectionReason reason) {
         this(player, target, reason, null);
     }
 
     /**
-     * Instantiates a new Server connect event.
+     * Instantiates a new TargetServer connect event.
      *
      * @param player  the player
      * @param target  the target
      * @param reason  the reason
      * @param request the request
      */
-    public ServerConnectEvent(ProxiedPlayer player, AbstractTarget target, Reason reason, TargetRequest request) {
+    public ProxyServerConnectEvent(ProxyPlayer player, AbstractTarget target, ConnectionReason reason, TargetRequest request) {
         this.player = player;
         this.target = target;
         this.reason = reason;
@@ -68,7 +67,7 @@ public class ServerConnectEvent extends AbstractEvent implements Cancelable {
      *
      * @return the player
      */
-    public ProxiedPlayer getPlayer() {
+    public ProxyPlayer getPlayer() {
         return this.player;
     }
 
@@ -77,7 +76,7 @@ public class ServerConnectEvent extends AbstractEvent implements Cancelable {
      *
      * @return the reason
      */
-    public Reason getReason() {
+    public ConnectionReason getReason() {
         return this.reason;
     }
 
@@ -122,13 +121,13 @@ public class ServerConnectEvent extends AbstractEvent implements Cancelable {
 
     @Override
     public String toString() {
-        return "ServerConnectEvent(player=" + this.getPlayer() + ", reason=" + this.getReason() + ", request=" + this.getRequest() + ", target=" + this.getTarget() + ", cancelled=" + this.isCancelled() + ")";
+        return "ProxyServerConnectEvent(player=" + this.getPlayer() + ", reason=" + this.getReason() + ", request=" + this.getRequest() + ", target=" + this.getTarget() + ", cancelled=" + this.isCancelled() + ")";
     }
 
     @Override
     public boolean equals(final Object o) {
         if (o == this) return true;
-        if (!(o instanceof ServerConnectEvent other)) return false;
+        if (!(o instanceof ProxyServerConnectEvent other)) return false;
         if (!other.canEqual(this)) return false;
         if (this.isCancelled() != other.isCancelled()) return false;
         final Object this$player = this.getPlayer();
@@ -152,7 +151,7 @@ public class ServerConnectEvent extends AbstractEvent implements Cancelable {
      * @return the boolean
      */
     protected boolean canEqual(final Object other) {
-        return other instanceof ServerConnectEvent;
+        return other instanceof ProxyServerConnectEvent;
     }
 
     @Override
@@ -171,41 +170,4 @@ public class ServerConnectEvent extends AbstractEvent implements Cancelable {
         return result;
     }
 
-    /**
-     * The enum Reason.
-     */
-    public enum Reason {
-        /**
-         * Lobby fallback reason.
-         */
-        LOBBY_FALLBACK,
-        /**
-         * Command reason.
-         */
-        COMMAND,
-        /**
-         * Server down redirect reason.
-         */
-        SERVER_DOWN_REDIRECT,
-        /**
-         * Kick redirect reason.
-         */
-        KICK_REDIRECT,
-        /**
-         * Plugin message reason.
-         */
-        PLUGIN_MESSAGE,
-        /**
-         * Join proxy reason.
-         */
-        JOIN_PROXY,
-        /**
-         * Plugin reason.
-         */
-        PLUGIN,
-        /**
-         * Unknown reason.
-         */
-        UNKNOWN
-    }
 }

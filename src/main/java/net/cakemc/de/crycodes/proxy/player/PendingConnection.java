@@ -45,7 +45,6 @@ public interface PendingConnection extends Connection {
      *
      * @return the uuid
      */
-    @Deprecated
     String getUUID();
 
     /**

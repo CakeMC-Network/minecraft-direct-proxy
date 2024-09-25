@@ -1,6 +1,6 @@
 package net.cakemc.de.crycodes.proxy.target;
 
-import net.cakemc.de.crycodes.proxy.player.ProxiedPlayer;
+import net.cakemc.de.crycodes.proxy.player.ProxyPlayer;
 
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
@@ -37,6 +37,6 @@ public interface AbstractTarget {
      *
      * @return the players
      */
-    Collection<ProxiedPlayer> getPlayers();
+    Collection<ProxyPlayer> getPlayers();
 
 }
