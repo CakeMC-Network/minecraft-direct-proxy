@@ -280,16 +280,7 @@ public class ProxyLoginHandler extends PacketHandler implements PendingConnectio
 
     @Override
     public void disconnect(String reason) {
-        if (canSendKickMessage()) {
-            disconnect(TextComponent.fromLegacy(reason));
-        } else {
-            channel.close();
-        }
-    }
-
-    @Override
-    public void disconnect(final BaseComponent... reason) {
-        disconnect(TextComponent.fromArray(reason));
+        disconnect(TextComponent.fromLegacy(reason));
     }
 
     @Override
@@ -300,6 +291,13 @@ public class ProxyLoginHandler extends PacketHandler implements PendingConnectio
             channel.close();
         }
     }
+
+    @Override
+    public void disconnect(final BaseComponent... reason) {
+        disconnect(TextComponent.fromArray(reason));
+    }
+
+
 
     @Override
     public String getName() {
@@ -370,11 +368,7 @@ public class ProxyLoginHandler extends PacketHandler implements PendingConnectio
 
     @Override
     public void exception(Throwable t) throws Exception {
-        if (canSendKickMessage()) {
-            disconnect(t.getMessage());
-        } else {
-            channel.close();
-        }
+        disconnect(t.getMessage());
     }
 
     @Override

@@ -81,8 +81,10 @@ public class PacketReader extends ChannelInboundHandlerAdapter {
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        cause.printStackTrace();
         if (ctx.channel().isActive()) {
             ctx.close();
+
         }
     }
 }
