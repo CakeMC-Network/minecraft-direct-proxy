@@ -42,7 +42,6 @@ public class KeepAliveRequestPacket extends AbstractPacket {
 
     @Override
     public void handle(AbstractPacketHandler handler) throws Exception {
-        handler.handle(this);
     }
 
     /**

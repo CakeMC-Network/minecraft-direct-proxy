@@ -23,15 +23,6 @@ public abstract class AbstractPacketHandler {
     /**
      * Handle.
      *
-     * @param ping the ping
-     * @throws Exception the exception
-     */
-    public void handle(KeepAliveResponsePacket ping) throws Exception {
-    }
-
-    /**
-     * Handle.
-     *
      * @param statusRequestPacket the status request packet
      * @throws Exception the exception
      */
@@ -54,15 +45,6 @@ public abstract class AbstractPacketHandler {
      * @throws Exception the exception
      */
     public void handle(PlayerIntentPacket playerIntentPacket) throws Exception {
-    }
-
-    /**
-     * Handle.
-     *
-     * @param keepAliveRequestPacket the keep alive request packet
-     * @throws Exception the exception
-     */
-    public void handle(KeepAliveRequestPacket keepAliveRequestPacket) throws Exception {
     }
 
     /**

@@ -89,15 +89,6 @@ public class DownstreamBridge extends PacketHandler {
     }
 
     @Override
-    public void handle(KeepAliveRequestPacket alive) throws Exception {
-        int timeout = 5000;
-        if (timeout <= 0 || server.getKeepAlives().size() < timeout / 50) // Some people disable timeout, otherwise allow a theoretical maximum of 1 keepalive per tick
-        {
-            server.getKeepAlives().add(new KeepAliveData(alive.getRandomId(), System.currentTimeMillis()));
-        }
-    }
-
-    @Override
     public void handle(DisconnectPacket disconnectPacket) throws Exception {
         AbstractTarget def = con.updateAndGetNextServer(server.getInfo());
         ProxyServerKickEvent event = (new ProxyServerKickEvent(con, server.getInfo(), new BaseComponent[]

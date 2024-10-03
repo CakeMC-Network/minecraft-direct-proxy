@@ -394,13 +394,6 @@ public class ProxyLoginHandler extends PacketHandler implements PendingConnectio
         statusHandler.handle(statusRequestPacket);
     }
 
-    @Override
-    public void handle(KeepAliveResponsePacket ping) throws Exception {
-        sendPacket(ping);
-        disconnect("");
-    }
-
-
     public ProxyServiceAddress getListener() {
         return this.listener;
     }

@@ -11,7 +11,6 @@ import net.cakemc.de.crycodes.proxy.network.PacketHandler;
 import net.cakemc.de.crycodes.proxy.network.packet.ProtocolPacket;
 import net.cakemc.de.crycodes.proxy.network.packet.impl.ClientSettingsPacket;
 import net.cakemc.de.crycodes.proxy.network.packet.impl.FinishConfigurationPacket;
-import net.cakemc.de.crycodes.proxy.network.packet.impl.KeepAliveRequestPacket;
 import net.cakemc.de.crycodes.proxy.network.packet.impl.StartConfigurationPacket;
 import net.cakemc.de.crycodes.proxy.network.packet.impl.login.ServerLoginAcknowledgedPacket;
 import net.cakemc.de.crycodes.proxy.player.ConnectedPlayer;
@@ -79,19 +78,6 @@ public class UpstreamBridge extends PacketHandler {
             }
 
             server.getCh().write(packet);
-        }
-    }
-
-    @Override
-    public void handle(KeepAliveRequestPacket alive) throws Exception {
-        KeepAliveData keepAliveData = con.getServer().getKeepAlives().peek();
-
-        if (keepAliveData != null && alive.getRandomId() == keepAliveData.getId()) {
-
-            int newPing = (int) (System.currentTimeMillis() - keepAliveData.getTime());
-            con.setPing(newPing);
-        } else {
-            throw CancelSendSignal.INSTANCE;
         }
     }
 
