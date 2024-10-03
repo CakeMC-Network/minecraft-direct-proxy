@@ -6,14 +6,14 @@ import net.cakemc.de.crycodes.proxy.target.AbstractTarget;
 import net.cakemc.de.crycodes.proxy.target.ConnectionReason;
 import net.cakemc.de.crycodes.proxy.target.TargetRequest;
 import net.cakemc.mc.lib.game.event.AbstractEvent;
-import net.cakemc.mc.lib.game.event.Cancelable;
+import net.cakemc.mc.lib.game.event.AbstractEvent.Cancellable;
 
 import java.util.Objects;
 
 /**
  * The type TargetServer connect event.
  */
-public class ProxyServerConnectEvent extends AbstractEvent implements Cancelable {
+public class ProxyServerConnectEvent extends AbstractEvent implements Cancellable {
     private final ProxyPlayer player;
     private final ConnectionReason reason;
     private final TargetRequest request;
@@ -110,18 +110,19 @@ public class ProxyServerConnectEvent extends AbstractEvent implements Cancelable
         this.target = target;
     }
 
-    public boolean isCancelled() {
+    public boolean cancelled() {
         return this.cancelled;
     }
 
     @Override
-    public boolean setCancelState(boolean b) {
+    public boolean cancel(boolean b) {
         return cancelled = b;
     }
 
     @Override
     public String toString() {
-        return "ProxyServerConnectEvent(player=" + this.getPlayer() + ", reason=" + this.getReason() + ", request=" + this.getRequest() + ", target=" + this.getTarget() + ", cancelled=" + this.isCancelled() + ")";
+        return "ProxyServerConnectEvent(player=" + this.getPlayer() + ", reason=" + this.getReason() + ", request=" +
+                this.getRequest() + ", target=" + this.getTarget() + ", cancelled=" + this.cancelled + ")";
     }
 
     @Override
@@ -129,7 +130,7 @@ public class ProxyServerConnectEvent extends AbstractEvent implements Cancelable
         if (o == this) return true;
         if (!(o instanceof ProxyServerConnectEvent other)) return false;
         if (!other.canEqual(this)) return false;
-        if (this.isCancelled() != other.isCancelled()) return false;
+        if (this.cancelled != other.cancelled) return false;
         final Object this$player = this.getPlayer();
         final Object other$player = other.getPlayer();
         if (!Objects.equals(this$player, other$player)) return false;
@@ -158,7 +159,7 @@ public class ProxyServerConnectEvent extends AbstractEvent implements Cancelable
     public int hashCode() {
         final int PRIME = 59;
         int result = 1;
-        result = result * PRIME + (this.isCancelled() ? 79 : 97);
+        result = result * PRIME + (this.cancelled ? 79 : 97);
         final Object $player = this.getPlayer();
         result = result * PRIME + ($player == null ? 43 : $player.hashCode());
         final Object $reason = this.getReason();

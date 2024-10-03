@@ -2,7 +2,7 @@ package net.cakemc.de.crycodes.proxy.events.connect;
 
 import net.cakemc.de.crycodes.proxy.units.ProxyServiceAddress;
 import net.cakemc.mc.lib.game.event.AbstractEvent;
-import net.cakemc.mc.lib.game.event.Cancelable;
+import net.cakemc.mc.lib.game.event.AbstractEvent.Cancellable;
 
 import java.net.SocketAddress;
 import java.util.Objects;
@@ -10,7 +10,7 @@ import java.util.Objects;
 /**
  * The type Player connect event.
  */
-public class ProxyPlayerConnectToServerEvent extends AbstractEvent implements Cancelable {
+public class ProxyPlayerConnectToServerEvent extends AbstractEvent implements Cancellable {
     private final SocketAddress socketAddress;
     private final ProxyServiceAddress listener;
     private boolean cancelled;
@@ -44,27 +44,19 @@ public class ProxyPlayerConnectToServerEvent extends AbstractEvent implements Ca
         return this.listener;
     }
 
-    public boolean isCancelled() {
-        return this.cancelled;
-    }
-
-    /**
-     * Sets cancelled.
-     *
-     * @param cancelled the cancelled
-     */
-    public void setCancelled(final boolean cancelled) {
-        this.cancelled = cancelled;
+    @Override
+    public boolean cancel(boolean b) {
+        return cancelled = b;
     }
 
     @Override
-    public boolean setCancelState(boolean b) {
-        return this.cancelled = b;
+    public boolean cancelled() {
+        return cancelled;
     }
 
     @Override
     public String toString() {
-        return "ClientConnectEvent(socketAddress=" + this.getSocketAddress() + ", listener=" + this.getListener() + ", cancelled=" + this.isCancelled() + ")";
+        return "ClientConnectEvent(socketAddress=" + this.getSocketAddress() + ", listener=" + this.getListener() + ", cancelled=" + this.cancelled + ")";
     }
 
     @Override
@@ -72,7 +64,7 @@ public class ProxyPlayerConnectToServerEvent extends AbstractEvent implements Ca
         if (o == this) return true;
         if (!(o instanceof ProxyPlayerConnectToServerEvent other)) return false;
         if (!other.canEqual(this)) return false;
-        if (this.isCancelled() != other.isCancelled()) return false;
+        if (this.cancelled != other.cancelled) return false;
         final Object this$socketAddress = this.getSocketAddress();
         final Object other$socketAddress = other.getSocketAddress();
         if (!Objects.equals(this$socketAddress, other$socketAddress))
@@ -96,7 +88,7 @@ public class ProxyPlayerConnectToServerEvent extends AbstractEvent implements Ca
     public int hashCode() {
         final int PRIME = 59;
         int result = 1;
-        result = result * PRIME + (this.isCancelled() ? 79 : 97);
+        result = result * PRIME + (this.cancelled ? 79 : 97);
         final Object $socketAddress = this.getSocketAddress();
         result = result * PRIME + ($socketAddress == null ? 43 : $socketAddress.hashCode());
         final Object $listener = this.getListener();
@@ -106,6 +98,7 @@ public class ProxyPlayerConnectToServerEvent extends AbstractEvent implements Ca
 
     @Override
     public String getName() {
-        return "";
+        return getClass().getSimpleName();
     }
+
 }

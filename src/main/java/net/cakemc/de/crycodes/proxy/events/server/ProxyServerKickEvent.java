@@ -3,7 +3,6 @@ package net.cakemc.de.crycodes.proxy.events.server;
 import net.cakemc.de.crycodes.proxy.player.ProxyPlayer;
 import net.cakemc.de.crycodes.proxy.target.AbstractTarget;
 import net.cakemc.mc.lib.game.event.AbstractEvent;
-import net.cakemc.mc.lib.game.event.Cancelable;
 import net.cakemc.mc.lib.game.text.test.api.chat.BaseComponent;
 import net.cakemc.mc.lib.game.text.test.api.chat.TextComponent;
 
@@ -12,7 +11,7 @@ import java.util.Objects;
 /**
  * The type TargetServer kick event.
  */
-public class ProxyServerKickEvent extends AbstractEvent implements Cancelable {
+public class ProxyServerKickEvent extends AbstractEvent implements AbstractEvent.Cancellable {
     private final ProxyPlayer player;
     private final AbstractTarget kickedFrom;
     private boolean cancelled;
@@ -195,8 +194,13 @@ public class ProxyServerKickEvent extends AbstractEvent implements Cancelable {
     }
 
     @Override
-    public boolean setCancelState(boolean b) {
+    public boolean cancel(boolean b) {
         return this.cancelled = b;
+    }
+
+    @Override
+    public boolean cancelled() {
+        return cancelled;
     }
 
     @Override
@@ -206,7 +210,8 @@ public class ProxyServerKickEvent extends AbstractEvent implements Cancelable {
 
     @Override
     public String toString() {
-        return "ProxyServerKickEvent(player=" + this.getPlayer() + ", kickedFrom=" + this.getKickedFrom() + ", cancelled=" + this.isCancelled() + ", reason=" + this.getReason() + ", cancelServer=" + this.getCancelServer() + ", state=" + this.getState() + ")";
+        return "ProxyServerKickEvent(player=" + this.getPlayer() + ", kickedFrom=" + this.getKickedFrom() + ", cancelled=" + this.isCancelled()
+                + ", reason=" + this.getReason() + ", cancelServer=" + this.getCancelServer() + ", state=" + this.getState() + ")";
     }
 
     @Override

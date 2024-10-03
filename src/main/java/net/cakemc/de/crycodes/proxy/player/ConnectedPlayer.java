@@ -225,7 +225,7 @@ public final class ConnectedPlayer implements ProxyPlayer {
         final ConnectionListener<TargetRequest.Result> connectionListener = request.getCallback();
         ProxyServerConnectEvent event = new ProxyServerConnectEvent(this, request.getTarget(), request.getReason(), request);
         abstractProxyService.getEventManager().call(event);
-        if (event.isCancelled()) {
+        if (event.cancelled()) {
             if (connectionListener != null) {
                 connectionListener.done(TargetRequest.Result.EVENT_CANCEL, null);
             }

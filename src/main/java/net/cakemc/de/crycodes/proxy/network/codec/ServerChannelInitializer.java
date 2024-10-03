@@ -40,7 +40,7 @@ public class ServerChannelInitializer extends ChannelInitializer<Channel> {
 
         ProxyPlayerConnectToServerEvent PLayerConnectEventProxy = new ProxyPlayerConnectToServerEvent(remoteAddress, listener);
         proxyService.getEventManager().call(PLayerConnectEventProxy);
-        if (PLayerConnectEventProxy.isCancelled()) {
+        if (PLayerConnectEventProxy.cancelled()) {
             ch.close();
             return;
         }
