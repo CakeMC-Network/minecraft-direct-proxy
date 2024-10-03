@@ -4,6 +4,7 @@ package net.cakemc.de.crycodes.proxy;
 import net.cakemc.de.crycodes.proxy.player.ConnectedPlayer;
 import net.cakemc.de.crycodes.proxy.player.ProxyPlayer;
 import net.cakemc.de.crycodes.proxy.target.AbstractTarget;
+import net.cakemc.mc.lib.Identifiably;
 import net.cakemc.mc.lib.game.event.EventManager;
 import net.cakemc.screensystem.ScreenAbleObject;
 
@@ -15,7 +16,7 @@ import java.util.UUID;
 /**
  * The type Abstract proxy service.
  */
-public abstract class AbstractProxyService implements ScreenAbleObject {
+public abstract class AbstractProxyService implements ScreenAbleObject, Identifiably {
 
     /**
      * Gets default target.
