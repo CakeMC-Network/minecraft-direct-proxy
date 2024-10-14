@@ -43,7 +43,6 @@ import java.util.UUID;
  */
 public class ProxyLoginHandler extends PacketHandler implements PendingConnection {
 
-
     private final ProxyServiceImpl service;
     private final ProxyServiceAddress listener;
     private final Set<String> registeredChannels = new HashSet<>();

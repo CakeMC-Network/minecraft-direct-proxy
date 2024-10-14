@@ -104,40 +104,8 @@ public enum Protocol {
      */
     public final DirectionData TO_CLIENT = new DirectionData(this, ProtocolVersion.Direction.TO_CLIENT);
 
-    /**
-     * The entry point of application.
-     *
-     * @param args the input arguments
-     */
-    public static void main(String[] args) {
-        for (int version : ProtocolVersion.getSupportedVersionIds()) {
-            dump(version);
-        }
-    }
-
-    private static void dump(int version) {
-        for (Protocol protocol : Protocol.values()) {
-            dump(version, protocol);
-        }
-    }
-
-    private static void dump(int version, Protocol protocol) {
-        dump(version, protocol.TO_CLIENT);
-        dump(version, protocol.TO_SERVER);
-    }
-
-    private static void dump(int version, DirectionData data) {
-        for (int id = 0; id < MAX_PACKET_ID; id++) {
-            AbstractPacket packet = data.createPacket(id, version);
-            if (packet != null) {
-                System.out.println(version + " " + data.protocolPhase + " " + data.direction + " " + id + " " + packet.getClass().getSimpleName());
-            }
-        }
-    }
-
     private static ProtocolMapping map(ProtocolVersion protocol, int id) {
         return new ProtocolMapping(protocol.getProtocolId(), id);
     }
-
 
 }

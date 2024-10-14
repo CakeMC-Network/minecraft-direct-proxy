@@ -2,6 +2,7 @@ package net.cakemc.de.crycodes.proxy.network.codec;
 
 import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.channel.Channel;
+import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import io.netty.handler.timeout.ReadTimeoutHandler;
@@ -40,11 +41,14 @@ public class PlayerChannelInitializer extends ChannelInitializer<Channel> {
 
         ch.config().setAllocator(PooledByteBufAllocator.DEFAULT);
         ch.pipeline().addLast(FRAME_DECODER, new Varint21FrameDecoder());
-        ch.pipeline().addLast(TIMEOUT_HANDLER, new ReadTimeoutHandler(5000, TimeUnit.MILLISECONDS));
+        //ch.pipeline().addLast(TIMEOUT_HANDLER, new ReadTimeoutHandler(5000, TimeUnit.MILLISECONDS));
 
         ch.pipeline().addLast(FRAME_PREPENDER, (toServer) ? SERVER_LENGTH_FIELD_PREPENDER : LENGTH_FIELD_PREPENDER);
         ch.pipeline().addLast(PACKET_READER, new PacketReader());
     }
 
-
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        super.exceptionCaught(ctx, cause);
+    }
 }

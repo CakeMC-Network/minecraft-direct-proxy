@@ -16,5 +16,6 @@ public class Test {
 
         proxyService.getTargets().add(new ProxyTargetImpl("test", new InetSocketAddress(20000)));
         proxyService.start();
+
     }
 }
