@@ -112,10 +112,10 @@ public class PlayerChannel {
             AbstractPacket defined = null;
             if (packet instanceof ProtocolPacket wrapper) {
                 wrapper.setReleased(true);
-                channel.writeAndFlush(wrapper.buf, channel.voidPromise());
+                channel.writeAndFlush(wrapper.buf);
                 defined = wrapper.packet;
             } else {
-                channel.writeAndFlush(packet, channel.voidPromise());
+                channel.writeAndFlush(packet);
                 if (packet instanceof AbstractPacket) {
                     defined = (AbstractPacket) packet;
                 }
@@ -152,7 +152,8 @@ public class PlayerChannel {
         if (!closed) {
             closed = closing = true;
             if (packet != null && channel.isActive()) {
-                channel.writeAndFlush(packet).addListeners(ChannelFutureListener.FIRE_EXCEPTION_ON_FAILURE, ChannelFutureListener.CLOSE);
+                channel.writeAndFlush(packet).addListeners(ChannelFutureListener.FIRE_EXCEPTION_ON_FAILURE,
+                        ChannelFutureListener.CLOSE);
             } else {
                 channel.flush();
                 channel.close();
