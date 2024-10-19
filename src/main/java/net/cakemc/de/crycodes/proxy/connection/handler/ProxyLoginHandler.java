@@ -157,6 +157,9 @@ public class ProxyLoginHandler extends PacketHandler implements PendingConnectio
 
         if (onlineMode) {
             AuthService.get().byUUID(packet.getUuid().toString()).thenAcceptAsync(user -> {
+                if (user == null) {
+                    this.disconnect("§cmojang auth offline?");
+                }
                 PlayerProfile profile = new PlayerProfile(packet.getUuid().toString(), user.name());
                 Arrays.stream(user.properties())
                         .map(properties -> new PlayerProfile
