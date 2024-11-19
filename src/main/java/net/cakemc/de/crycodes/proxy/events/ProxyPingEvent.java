@@ -1,9 +1,13 @@
 package net.cakemc.de.crycodes.proxy.events;
 
 import net.cakemc.de.crycodes.proxy.player.PendingConnection;
+import net.cakemc.mc.lib.game.PlayerProfile;
 import net.cakemc.mc.lib.game.Status;
 import net.cakemc.mc.lib.game.event.AbstractEvent;
+import net.cakemc.mc.lib.game.text.rewrite.LegacyText;
+import net.cakemc.mc.lib.game.text.rewrite.Text;
 
+import java.util.Arrays;
 import java.util.Objects;
 
 /**
@@ -40,6 +44,67 @@ public class ProxyPingEvent extends AbstractEvent {
      */
     public Status.Info getResponse() {
         return this.response;
+    }
+
+    public int getPingedProtocolId() {
+        return response.getVersionInfo().getProtocolVersion();
+    }
+
+    public ProxyPingEvent setVersion(String version, int protocolId) {
+        this.response.setVersionInfo(new Status.Version(version, protocolId));
+        return this;
+    }
+
+    public ProxyPingEvent setPlayer(int players, int slots, PlayerProfile... profiles) {
+        this.response.setPlayerList(
+                new Status.PlayerList(slots, players, Arrays.stream(profiles).toList())
+        );
+        return this;
+    }
+
+    public ProxyPingEvent setMotdLines(String top, String bottom) {
+        this.response.setDescription(LegacyText.fromLegacy(
+                mergeMotdLinesCenter(top, bottom, 59)));
+        return this;
+    }
+
+    /**
+     * Merges two strings into one Minecraft MOTD-compatible string.
+     * The first string represents the top line, and the second string represents the bottom line.
+     * The top line is automatically centered with spaces if its length is less than the maximum width.
+     *
+     * @param topLine    the first line of the MOTD
+     * @param bottomLine the second line of the MOTD
+     * @param maxWidth   the maximum width for each line
+     * @return a single string formatted for the Minecraft MOTD
+     */
+    public static String mergeMotdLinesCenter(String topLine, String bottomLine, int maxWidth) {
+        if (topLine == null) topLine = "";
+        if (bottomLine == null) bottomLine = "";
+
+        String centeredTopLine = centerText(topLine, maxWidth);
+        String centeredBottomLine = centerText(bottomLine, maxWidth);
+        return centeredTopLine + "\n" + centeredBottomLine;
+    }
+
+    /**
+     * Centers a string by adding spaces to the beginning and end until it reaches the specified width.
+     * If the string length exceeds the width, it is truncated.
+     *
+     * @param text the text to center
+     * @param width the maximum width of the centered text
+     * @return the centered text
+     */
+    private static String centerText(String text, int width) {
+        if (text.length() >= width) {
+            return text.substring(0, width); // Truncate if too long
+        }
+
+        int totalPadding = width - text.length();
+        int paddingStart = totalPadding / 2;
+        int paddingEnd = totalPadding - paddingStart;
+
+        return " ".repeat(paddingStart) + text + " ".repeat(paddingEnd);
     }
 
     /**

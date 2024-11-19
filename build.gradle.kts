@@ -29,7 +29,7 @@ repositories {
 
     maven {
         name = "cakemc-nexus"
-        url = URI.create("http://cakemc.net:8081/repository/maven-releases")
+        url = URI.create("http://cakemc.net:8081/releases")
         credentials {
             username = repoUsername
             password = repoPassword
@@ -97,7 +97,7 @@ publishing {
     repositories {
         maven {
             name = "cakemc"
-            url = URI.create("http://cakemc.net:8081/repository/maven-releases")
+            url = URI.create("http://cakemc.net:8081/releases")
             credentials {
                 username = repoUsername
                 password = repoPassword

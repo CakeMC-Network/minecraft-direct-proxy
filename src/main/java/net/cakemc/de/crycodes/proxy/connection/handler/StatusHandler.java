@@ -77,7 +77,8 @@ public class StatusHandler {
      */
     public void handle(StatusRequestPacket statusRequestPacket) throws Exception {
         final String motd = loginHandler.getListener().getMotd();
-        final int protocol = (ProtocolVersion.getSupportedVersionIds().contains(loginHandler.getPlayerIntentPacket().getProtocolVersion())) ?
+        final int protocol = (ProtocolVersion.getSupportedVersionIds()
+                .contains(loginHandler.getPlayerIntentPacket().getProtocolVersion())) ?
                 loginHandler.getPlayerIntentPacket().getProtocolVersion() : loginHandler.getService().getProtocolVersion();
 
         Status.Info pingInfo = getPingInfo(motd, protocol);
@@ -88,6 +89,7 @@ public class StatusHandler {
         loginHandler.sendPacket(new StatusResponsePacket(proxyPingEvent.getResponse()));
 
         loginHandler.setThisState(ProxyLoginHandler.State.PING);
+        loginHandler.getChannel().close();
     }
 
     private String getFirstLine(String str) {
