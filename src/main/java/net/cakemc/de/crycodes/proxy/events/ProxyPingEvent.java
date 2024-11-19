@@ -62,9 +62,14 @@ public class ProxyPingEvent extends AbstractEvent {
         return this;
     }
 
+    public ProxyPingEvent setMotdRaw(String fullMots) {
+        this.response.setDescription(LegacyText.fromLegacy(fullMots));
+        return this;
+    }
+
     public ProxyPingEvent setMotdLines(String top, String bottom) {
         this.response.setDescription(LegacyText.fromLegacy(
-                mergeMotdLinesCenter(top, bottom, 59)));
+                mergeMotdLinesCenter(top, bottom, 69)));
         return this;
     }
 
@@ -78,13 +83,24 @@ public class ProxyPingEvent extends AbstractEvent {
      * @param maxWidth   the maximum width for each line
      * @return a single string formatted for the Minecraft MOTD
      */
-    public static String mergeMotdLinesCenter(String topLine, String bottomLine, int maxWidth) {
+    private String mergeMotdLinesCenter(String topLine, String bottomLine, int maxWidth) {
         if (topLine == null) topLine = "";
         if (bottomLine == null) bottomLine = "";
 
         String centeredTopLine = centerText(topLine, maxWidth);
         String centeredBottomLine = centerText(bottomLine, maxWidth);
         return centeredTopLine + "\n" + centeredBottomLine;
+    }
+
+    int countCharsSkipColorChar(String text) {
+        int counter = 0;
+        for (char c : text.toCharArray()) {
+            if (c == '§')
+                continue;
+
+            counter++;
+        }
+        return counter;
     }
 
     /**
@@ -95,16 +111,16 @@ public class ProxyPingEvent extends AbstractEvent {
      * @param width the maximum width of the centered text
      * @return the centered text
      */
-    private static String centerText(String text, int width) {
-        if (text.length() >= width) {
+    private String centerText(String text, int width) {
+        int length = countCharsSkipColorChar(text);
+        if (length >= width) {
             return text.substring(0, width); // Truncate if too long
         }
 
-        int totalPadding = width - text.length();
+        int totalPadding = width - length;
         int paddingStart = totalPadding / 2;
-        int paddingEnd = totalPadding - paddingStart;
 
-        return " ".repeat(paddingStart) + text + " ".repeat(paddingEnd);
+        return " ".repeat(paddingStart) + text;
     }
 
     /**
