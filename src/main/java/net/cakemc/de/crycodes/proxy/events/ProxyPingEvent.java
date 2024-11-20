@@ -6,6 +6,7 @@ import net.cakemc.mc.lib.game.Status;
 import net.cakemc.mc.lib.game.event.AbstractEvent;
 import net.cakemc.mc.lib.game.text.rewrite.LegacyText;
 import net.cakemc.mc.lib.game.text.rewrite.Text;
+import net.cakemc.mc.lib.game.text.test.api.ChatColor;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -69,7 +70,7 @@ public class ProxyPingEvent extends AbstractEvent {
 
     public ProxyPingEvent setMotdLines(String top, String bottom) {
         this.response.setDescription(LegacyText.fromLegacy(
-                mergeMotdLinesCenter(top, bottom, 69)));
+                mergeMotdLinesCenter(top, bottom, 55)));
         return this;
     }
 
@@ -93,14 +94,7 @@ public class ProxyPingEvent extends AbstractEvent {
     }
 
     int countCharsSkipColorChar(String text) {
-        int counter = 0;
-        for (char c : text.toCharArray()) {
-            if (c == '§')
-                continue;
-
-            counter++;
-        }
-        return counter;
+        return ChatColor.stripColor(text).length();
     }
 
     /**
