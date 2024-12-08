@@ -47,7 +47,7 @@ public class ServerGameProfilePacket extends AbstractPacket {
         if (protocolVersion >= ProtocolVersion.MINECRAFT_1_19.getProtocolId()) {
             properties = readProperties(buf);
         }
-        if (protocolVersion >= ProtocolVersion.MINECRAFT_1_20_5.getProtocolId()) {
+        if (protocolVersion >= ProtocolVersion.MINECRAFT_1_20.getProtocolId()) {
             // Whether the client should disconnect on its own if it receives invalid data from the server
             buf.readBoolean();
         }

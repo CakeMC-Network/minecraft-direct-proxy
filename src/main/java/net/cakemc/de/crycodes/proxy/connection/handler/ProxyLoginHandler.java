@@ -5,11 +5,12 @@ import net.cakemc.de.crycodes.proxy.ProxyServiceImpl;
 import net.cakemc.de.crycodes.proxy.channel.PlayerChannel;
 import net.cakemc.de.crycodes.proxy.connection.UpstreamBridge;
 import net.cakemc.de.crycodes.proxy.events.connect.ProxyLoginEvent;
-import net.cakemc.de.crycodes.proxy.events.server.ProxyServerConnectEvent;
 import net.cakemc.de.crycodes.proxy.network.PacketHandler;
 import net.cakemc.de.crycodes.proxy.network.PacketReader;
 import net.cakemc.de.crycodes.proxy.network.PipelineUtils;
 import net.cakemc.de.crycodes.proxy.network.codec.cipher.*;
+import net.cakemc.de.crycodes.proxy.network.http.ClientAuthHttpCallBack;
+import net.cakemc.de.crycodes.proxy.network.http.HttpClient;
 import net.cakemc.de.crycodes.proxy.network.packet.AbstractPacket;
 import net.cakemc.de.crycodes.proxy.network.packet.ProtocolPacket;
 import net.cakemc.de.crycodes.proxy.network.packet.impl.*;
@@ -27,21 +28,32 @@ import net.cakemc.de.crycodes.proxy.units.ProxyServiceAddress;
 import net.cakemc.mc.lib.game.PlayerProfile;
 import net.cakemc.mc.lib.game.text.test.api.chat.BaseComponent;
 import net.cakemc.mc.lib.game.text.test.api.chat.TextComponent;
-import net.cakemc.protocol.api.auth.AuthService;
 
 import javax.crypto.SecretKey;
+import java.math.BigInteger;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.security.KeyPair;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.regex.Pattern;
 
 /**
  * The type Proxy login handler.
  */
 public class ProxyLoginHandler extends PacketHandler implements PendingConnection {
+
+    private static final String BASE_URL =
+            "https://sessionserver.mojang.com/session/minecraft/hasJoined";
+
+    private static final Pattern USER_NAME_PATTERN = Pattern.compile("^[a-zA-Z0-9_]+$");
+
+    private final String sessionId = Long.toString(ThreadLocalRandom.current().nextLong(), 16).trim();
 
     private final ProxyServiceImpl service;
     private final ProxyServiceAddress listener;
@@ -151,50 +163,81 @@ public class ProxyLoginHandler extends PacketHandler implements PendingConnectio
     @Override
     public void handle(ServerHelloPacket packet) throws Exception {
         this.name = packet.getData();
-        this.uniqueId = packet.getUuid();
 
         this.serverHelloPacket = packet;
 
-        if (onlineMode) {
-            AuthService.get().byUUID(packet.getUuid().toString()).thenAcceptAsync(user -> {
-                if (user == null) {
-                    this.disconnect("§cmojang auth offline?");
-                }
-                PlayerProfile profile = new PlayerProfile(packet.getUuid().toString(), user.name());
-                Arrays.stream(user.properties())
-                        .map(properties -> new PlayerProfile
-                                .Property(properties.name(), properties.value(), properties.signature()))
-                        .forEach(property -> profile.getProperties().add(property));
-                this.profile = profile;
-
-                EncryptionRequestPacket encryptionRequestPacket = new EncryptionRequestPacket(
-                        "", keyPair.getPublic().getEncoded(), this.pass, true
-                );
-                sendPacket(encryptionRequestPacket);
-                thisState = State.ENCRYPT;
-            }).join();
-
-        } else {
-            // offline profile
-            AuthService.get().byUUID(packet.getUuid().toString()).thenAcceptAsync(user -> {
-                if (user != null) {
-                    PlayerProfile profile = new PlayerProfile(packet.getUuid().toString(), user.name());
-                    Arrays.stream(user.properties())
-                            .map(properties -> new PlayerProfile
-                                    .Property(properties.name(), properties.value(), properties.signature()))
-                            .forEach(property -> profile.getProperties().add(property));
-                    this.profile = profile;
-                    return;
-                }
-                this.profile = new PlayerProfile(packet.getUuid().toString(), packet.getData());
-            }).join();
-
-            ServerGameProfilePacket profilePacket = new ServerGameProfilePacket(
-                    uniqueId, name, profile.getProperties().toArray(new PlayerProfile.Property[0]));
-
-            sendPacket(profilePacket);
-            thisState = State.FINISHING;
+        String userName = packet.getData();
+        int length = userName.length();
+        if (length > 16 || !USER_NAME_PATTERN.matcher(userName).find()) {
+            disconnect(new TextComponent("invalid username!"));
+            return;
         }
+
+        if (this.onlineMode) {
+            // Get necessary information to create our request message
+            setName(userName);
+
+            // Send created request message and wait for the response
+            sendPacket(new EncryptionRequestPacket(sessionId,
+                    keyPair.getPublic().getEncoded(), pass,
+                    true));
+            thisState = State.ENCRYPT;
+        } else {
+            this.setName(userName);
+
+            profile = (new PlayerProfile(
+                    UUID.nameUUIDFromBytes("OfflineUser:%s".formatted(userName).getBytes()).toString(),
+                    userName)
+            );
+            this.setUniqueId(profile.getUUID());
+
+            sendPacket(new ServerGameProfilePacket(
+                    uniqueId, name, profile.getProperties().toArray(new PlayerProfile.Property[0])
+            ));
+            thisState = State.FINISHING;
+            this.finish();
+        }
+
+        //if (onlineMode) {
+        //    AuthService.get().byUUID(packet.getUuid().toString()).thenAcceptAsync(user -> {
+        //        if (user == null) {
+        //            this.disconnect("§cmojang auth offline?");
+        //        }
+        //        PlayerProfile profile = new PlayerProfile(packet.getUuid().toString(), user.name());
+        //        Arrays.stream(user.properties())
+        //                .map(properties -> new PlayerProfile
+        //                        .Property(properties.name(), properties.value(), properties.signature()))
+        //                .forEach(property -> profile.getProperties().add(property));
+        //        this.profile = profile;
+        //
+        //        EncryptionRequestPacket encryptionRequestPacket = new EncryptionRequestPacket(
+        //                "", keyPair.getPublic().getEncoded(), this.pass, true
+        //        );
+        //        sendPacket(encryptionRequestPacket);
+        //        thisState = State.ENCRYPT;
+        //    }).join();
+        //
+        //} else {
+        //    // offline profile
+        //    AuthService.get().byUUID(packet.getUuid().toString()).thenAcceptAsync(user -> {
+        //        if (user != null) {
+        //            PlayerProfile profile = new PlayerProfile(packet.getUuid().toString(), user.name());
+        //            Arrays.stream(user.properties())
+        //                    .map(properties -> new PlayerProfile
+        //                            .Property(properties.name(), properties.value(), properties.signature()))
+        //                    .forEach(property -> profile.getProperties().add(property));
+        //            this.profile = profile;
+        //            return;
+        //        }
+        //        this.profile = new PlayerProfile(packet.getUuid().toString(), packet.getData());
+        //    }).join();
+        //
+        //    ServerGameProfilePacket profilePacket = new ServerGameProfilePacket(
+        //            uniqueId, name, profile.getProperties().toArray(new PlayerProfile.Property[0]));
+        //
+        //    sendPacket(profilePacket);
+        //    thisState = State.FINISHING;
+        //}
     }
 
     @Override
@@ -211,10 +254,31 @@ public class ProxyLoginHandler extends PacketHandler implements PendingConnectio
         Encryption encrypt = EncryptionUtil.getCipher(true, secretKey);
         channel.addBefore(PipelineUtils.FRAME_PREPENDER, PipelineUtils.ENCRYPT_HANDLER, new CipherEncoder(encrypt));
 
-        finish();
+        // create hash for auth
+        String hash;
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-1");
+            digest.update(sessionId.getBytes());
+            digest.update(secretKey.getEncoded());
+            digest.update(keyPair.getPublic().getEncoded());
+
+            // BigInteger takes care of sign and leading zeroes
+            hash = new BigInteger(digest.digest()).toString(16);
+        } catch (NoSuchAlgorithmException ex) {
+            ex.printStackTrace();
+            return;
+        }
+
+        String url = BASE_URL + "?username=" + getName() // NON-NLS
+                + "&serverId=" + hash; // NON-NLS
+
+        HttpClient.connectWithResult(
+                url, channel.getHandle().eventLoop(),
+                new ClientAuthHttpCallBack(this)
+        );
     }
 
-    private void finish() {
+    public void finish() {
         ProxyPlayer oldName = service.getPlayer(getName());
         if (oldName != null) {
             disconnect("already connected to this proxy instance");
@@ -670,4 +734,9 @@ public class ProxyLoginHandler extends PacketHandler implements PendingConnectio
          */
         FINISHING
     }
+
+    public void setProfile(PlayerProfile profile) {
+        this.profile = profile;
+    }
+
 }
