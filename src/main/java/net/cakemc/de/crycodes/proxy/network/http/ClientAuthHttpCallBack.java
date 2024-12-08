@@ -47,8 +47,9 @@ public class ClientAuthHttpCallBack implements HttpCallback {
 			PlayerProfile profile = new PlayerProfile(uuid, name);
 			profile.getProperties().addAll(properties);
 
-			networkPlayer.setProfile(profile);
 			networkPlayer.setUniqueId(UUID.fromString(uuid));
+			networkPlayer.setProfile(profile);
+
 
 			networkPlayer.finish();
 		} catch (IOException e) {

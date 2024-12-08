@@ -5,7 +5,6 @@ import net.cakemc.de.crycodes.proxy.AbstractProxyService;
 import net.cakemc.de.crycodes.proxy.channel.PlayerChannel;
 import net.cakemc.de.crycodes.proxy.connection.DownstreamBridge;
 import net.cakemc.de.crycodes.proxy.connection.data.CancelSendSignal;
-import net.cakemc.de.crycodes.proxy.events.server.ProxyServerConnectEvent;
 import net.cakemc.de.crycodes.proxy.events.server.ProxyServerConnectedEvent;
 import net.cakemc.de.crycodes.proxy.events.server.ProxyServerKickEvent;
 import net.cakemc.de.crycodes.proxy.events.server.ProxyServerSwitchEvent;
@@ -22,9 +21,13 @@ import net.cakemc.de.crycodes.proxy.network.packet.impl.login.ServerSetCompressi
 import net.cakemc.de.crycodes.proxy.player.ConnectedPlayer;
 import net.cakemc.de.crycodes.proxy.protocol.Protocol;
 import net.cakemc.de.crycodes.proxy.protocol.ProtocolVersion;
+import net.cakemc.mc.lib.common.type.json.JsonArray;
+import net.cakemc.mc.lib.common.type.json.JsonObject;
 import net.cakemc.mc.lib.game.PlayerProfile;
 import net.cakemc.mc.lib.game.text.test.api.chat.BaseComponent;
 
+import java.net.Inet6Address;
+import java.net.InetSocketAddress;
 import java.util.Locale;
 import java.util.Queue;
 import java.util.UUID;
@@ -132,6 +135,28 @@ public class ServerConnector extends PacketHandler {
         PlayerIntentPacket copiedPlayerIntentPacket = new PlayerIntentPacket(originalPlayerIntentPacket.getProtocolVersion(),
                 originalPlayerIntentPacket.getHost(), originalPlayerIntentPacket.getPort(), 2);
 
+        // append proxy-data
+        String newHost = copiedPlayerIntentPacket.getHost() + "\00" + sanitizeAddress(user.getAddress()) + "\00" + user.getUUID();
+        copiedPlayerIntentPacket.setHost(newHost);
+
+        PlayerProfile profile = this.user.getPendingConnection().getProfile();
+        if (profile != null && profile.getProperties() != null && !profile.getProperties().isEmpty()) {
+            JsonArray array = new JsonArray();
+
+            for (PlayerProfile.Property property : profile.getProperties()) {
+                JsonObject object = new JsonObject();
+                object.add("name", property.getName());
+                object.add("value", property.getValue());
+                object.add("signature", property.getSignature());
+
+                array.add(object);
+            }
+            newHost += "\00" + array.toString();
+        }
+
+        copiedPlayerIntentPacket.setHost(newHost);
+        // append proxy-data
+
         if (!user.getExtraDataInHandshake().isEmpty()) {
             copiedPlayerIntentPacket.setHost(copiedPlayerIntentPacket.getHost() + user.getExtraDataInHandshake());
         }
@@ -139,6 +164,18 @@ public class ServerConnector extends PacketHandler {
         channel.write(copiedPlayerIntentPacket);
         channel.setProtocol(Protocol.LOGIN);
         channel.write(new ServerHelloPacket(user.getName(), null, user.getUniqueId()));
+    }
+
+    String sanitizeAddress(InetSocketAddress address) {
+        String string = address.getAddress().getHostAddress();
+
+        // Remove IPv6 scope if present
+        if (address.getAddress() instanceof Inet6Address) {
+            int strip = string.indexOf('%');
+            return (strip == -1) ? string : string.substring(0, strip);
+        } else {
+            return string;
+        }
     }
 
     @Override
@@ -268,4 +305,6 @@ public class ServerConnector extends PacketHandler {
          */
         FINISHED
     }
+
+
 }

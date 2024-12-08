@@ -183,17 +183,18 @@ public class ProxyLoginHandler extends PacketHandler implements PendingConnectio
                     true));
             thisState = State.ENCRYPT;
         } else {
-            this.setName(userName);
-
             profile = (new PlayerProfile(
                     UUID.nameUUIDFromBytes("OfflineUser:%s".formatted(userName).getBytes()).toString(),
                     userName)
             );
+
+            this.setName(userName);
             this.setUniqueId(profile.getUUID());
 
             sendPacket(new ServerGameProfilePacket(
                     uniqueId, name, profile.getProperties().toArray(new PlayerProfile.Property[0])
             ));
+
             thisState = State.FINISHING;
             this.finish();
         }
