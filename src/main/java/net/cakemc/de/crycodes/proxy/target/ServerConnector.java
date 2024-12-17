@@ -97,7 +97,8 @@ public class ServerConnector extends PacketHandler {
         } else {
             user.getServer().setObsolete(true);
             // Update debug info from login packet
-            user.sendPacket(new EntityStatusPacket(user.getClientEntityId(), playerCreationPacket.isReducedDebugInfo() ? EntityStatusPacket.DEBUG_INFO_REDUCED : EntityStatusPacket.DEBUG_INFO_NORMAL));
+            user.sendPacket(new EntityStatusPacket(user.getClientEntityId(), playerCreationPacket.isReducedDebugInfo() ?
+                    EntityStatusPacket.DEBUG_INFO_REDUCED : EntityStatusPacket.DEBUG_INFO_NORMAL));
             // And immediate respawn
             if (user.getPendingConnection().getVersion() >= ProtocolVersion.MINECRAFT_1_15.getProtocolId()) {
                 user.sendPacket(new GameStatePacket(GameStatePacket.IMMEDIATE_RESPAWN, playerCreationPacket.isNormalRespawn() ? 0 : 1));
