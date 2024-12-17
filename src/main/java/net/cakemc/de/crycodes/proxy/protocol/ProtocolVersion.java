@@ -172,7 +172,11 @@ public enum ProtocolVersion {
     /**
      * Minecraft 1 21 2 protocol version.
      */
-    MINECRAFT_1_21_2(1073742030, "1.21.x");
+    MINECRAFT_1_21_2(768, "1.21.x"),
+
+    MINECRAFT_1_21_4(769, "1.21.4"),
+
+    ;
 
     /**
      * The constant SNAPSHOT_SUPPORT.

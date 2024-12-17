@@ -427,7 +427,7 @@ public abstract class AbstractPacket {
      * @return the bit set
      */
     public static BitSet readFixedBitSet(int i, ByteBuf buf) {
-        byte[] bits = new byte[(i + 8) >> 3];
+        byte[] bits = new byte[(i + 7) >> 3];
         buf.readBytes(bits);
         return BitSet.valueOf(bits);
     }
@@ -443,7 +443,7 @@ public abstract class AbstractPacket {
         if (bits.length() > size) {
             throw new PacketOverflowException("BitSet too large (expected " + size + " got " + bits.size() + ")");
         }
-        buf.writeBytes(Arrays.copyOf(bits.toByteArray(), (size + 8) >> 3));
+        buf.writeBytes(Arrays.copyOf(bits.toByteArray(), (size + 7) >> 3));
     }
 
     /**
