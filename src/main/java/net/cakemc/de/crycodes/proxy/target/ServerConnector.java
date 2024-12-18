@@ -257,7 +257,7 @@ public class ServerConnector extends PacketHandler {
 
     @Override
     public void handle(EncryptionRequestPacket encryptionRequestPacket) throws Exception {
-        throw new RuntimeException("TargetServer is online mode!");
+        this.user.disconnect("§c§l service is not a sub server!");
     }
 
     @Override
