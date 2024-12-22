@@ -21,12 +21,9 @@ import net.cakemc.de.crycodes.proxy.network.packet.ProtocolPacket;
 import net.cakemc.de.crycodes.proxy.network.packet.impl.ClientSettingsPacket;
 import net.cakemc.de.crycodes.proxy.network.packet.impl.DisconnectPacket;
 import net.cakemc.de.crycodes.proxy.network.packet.impl.ServerTransferPacket;
-import net.cakemc.de.crycodes.proxy.network.packet.impl.SystemChatPacket;
 import net.cakemc.de.crycodes.proxy.network.packet.impl.login.ServerSetCompressionPacket;
 import net.cakemc.de.crycodes.proxy.protocol.Protocol;
-import net.cakemc.de.crycodes.proxy.protocol.ProtocolVersion;
 import net.cakemc.de.crycodes.proxy.target.*;
-import net.cakemc.mc.lib.game.text.test.api.ChatMessageType;
 import net.cakemc.mc.lib.game.text.test.api.chat.BaseComponent;
 import net.cakemc.mc.lib.game.text.test.api.chat.TextComponent;
 
@@ -239,14 +236,12 @@ public final class ConnectedPlayer implements ProxyPlayer {
             if (connectionListener != null) {
                 connectionListener.done(TargetRequest.Result.ALREADY_CONNECTED, null);
             }
-            sendMessage("already connected to the service!");
             return;
         }
         if (pendingConnects.contains(target)) {
             if (connectionListener != null) {
                 connectionListener.done(TargetRequest.Result.ALREADY_CONNECTING, null);
             }
-            sendMessage("already connected to the service!");
             return;
         }
         pendingConnects.add(target);
@@ -272,12 +267,9 @@ public final class ConnectedPlayer implements ProxyPlayer {
                 pendingConnects.remove(target);
                 AbstractTarget def = updateAndGetNextServer(target);
                 if (request.isRetry() && def != null && (getServer() == null || def != getServer().getInfo())) {
-                    sendMessages("connecting to fallback service..");
                     connect(def, null, ConnectionReason.LOBBY_FALLBACK);
                 } else if (dimensionChange) {
                     disconnect(connectionFailMessage(future.cause()));
-                } else {
-                    sendMessage(connectionFailMessage(future.cause()));
                 }
             }
         };
@@ -324,65 +316,6 @@ public final class ConnectedPlayer implements ProxyPlayer {
             }
         }
     }
-
-    @Override
-    public void sendMessage(String message) {
-        sendMessage(TextComponent.fromLegacy(message));
-    }
-
-    @Override
-    public void sendMessages(String... messages) {
-        for (String message : messages) {
-            sendMessage(message);
-        }
-    }
-
-    @Override
-    public void sendMessage(BaseComponent... message) {
-        sendMessage(ChatMessageType.SYSTEM, message);
-    }
-
-    @Override
-    public void sendMessage(BaseComponent message) {
-        sendMessage(ChatMessageType.SYSTEM, message);
-    }
-
-    @Override
-    public void sendMessage(ChatMessageType position, BaseComponent... message) {
-        sendMessage(position, null, TextComponent.fromArray(message));
-    }
-
-    @Override
-    public void sendMessage(ChatMessageType position, BaseComponent message) {
-        sendMessage(position, null, message);
-    }
-
-    @Override
-    public void sendMessage(UUID sender, BaseComponent... message) {
-        sendMessage(ChatMessageType.CHAT, sender, TextComponent.fromArray(message));
-    }
-
-    @Override
-    public void sendMessage(UUID sender, BaseComponent message) {
-        sendMessage(ChatMessageType.CHAT, sender, message);
-    }
-
-    private void sendMessage(ChatMessageType position, UUID sender, BaseComponent message) {
-        if (position == ChatMessageType.ACTION_BAR &&
-                getPendingConnection().getVersion() < ProtocolVersion.MINECRAFT_1_17.getProtocolId()) {
-            if (getPendingConnection().getVersion() <= ProtocolVersion.MINECRAFT_1_10.getProtocolId()) {
-                message = new TextComponent(BaseComponent.toLegacyText(message));
-            }
-        }
-        if (getPendingConnection().getVersion() >= ProtocolVersion.MINECRAFT_1_19.getProtocolId()) {
-            // Align with Spigot and remove client side formatting for now
-            if (position == ChatMessageType.CHAT) {
-                position = ChatMessageType.SYSTEM;
-            }
-            sendPacketQueued(new SystemChatPacket(message, position.ordinal()));
-        }
-    }
-
 
     @Override
     public InetSocketAddress getAddress() {

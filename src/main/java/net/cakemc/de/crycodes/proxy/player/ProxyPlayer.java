@@ -32,65 +32,6 @@ public interface ProxyPlayer extends Connection {
      */
     void setDisplayName(String name);
 
-    /**
-     * Send message.
-     *
-     * @param message the message
-     */
-    void sendMessage(String message);
-
-    /**
-     * Send messages.
-     *
-     * @param messages the messages
-     */
-    void sendMessages(String... messages);
-
-    /**
-     * Send message.
-     *
-     * @param message the message
-     */
-    void sendMessage(BaseComponent... message);
-
-    /**
-     * Send message.
-     *
-     * @param message the message
-     */
-    void sendMessage(BaseComponent message);
-
-    /**
-     * Send message.
-     *
-     * @param position the position
-     * @param message  the message
-     */
-    void sendMessage(ChatMessageType position, BaseComponent... message);
-
-    /**
-     * Send message.
-     *
-     * @param position the position
-     * @param message  the message
-     */
-    void sendMessage(ChatMessageType position, BaseComponent message);
-
-    /**
-     * Send message.
-     *
-     * @param sender  the sender
-     * @param message the message
-     */
-    void sendMessage(UUID sender, BaseComponent... message);
-
-    /**
-     * Send message.
-     *
-     * @param sender  the sender
-     * @param message the message
-     */
-    void sendMessage(UUID sender, BaseComponent message);
 
     /**
      * Connect.

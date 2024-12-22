@@ -88,17 +88,6 @@ public enum Protocol {
                     map(ProtocolVersion.MINECRAFT_1_20_5, 29)
             );
             TO_CLIENT.registerPacket(
-                    SystemChatPacket.class, SystemChatPacket::new,
-                    map(ProtocolVersion.MINECRAFT_1_19, 95),
-                    map(ProtocolVersion.MINECRAFT_1_19_1, 98),
-                    map(ProtocolVersion.MINECRAFT_1_19_3, 96),
-                    map(ProtocolVersion.MINECRAFT_1_19_4, 100),
-                    map(ProtocolVersion.MINECRAFT_1_20_2, 103),
-                    map(ProtocolVersion.MINECRAFT_1_20_3, 105),
-                    map(ProtocolVersion.MINECRAFT_1_20_5, 108),
-                    map(ProtocolVersion.MINECRAFT_1_21_2, 111)
-            );
-            TO_CLIENT.registerPacket(
                     EntityStatusPacket.class, EntityStatusPacket::new,
                     map(ProtocolVersion.MINECRAFT_1_8, 26),
                     map(ProtocolVersion.MINECRAFT_1_9, 27),

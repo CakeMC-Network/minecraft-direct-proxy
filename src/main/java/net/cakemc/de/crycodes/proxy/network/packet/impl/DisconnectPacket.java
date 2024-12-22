@@ -28,6 +28,7 @@ public class DisconnectPacket extends AbstractPacket {
      * @param message the message
      */
     public DisconnectPacket(final BaseComponent message) {
+        System.out.println("disconnected for %s".formatted(message.toLegacyText()));
         this.message = message;
     }
 

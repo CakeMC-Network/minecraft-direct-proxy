@@ -124,8 +124,6 @@ public class ServerConnector extends PacketHandler {
         String message = "Exception Connecting: " + t.getMessage();
         if (user.getServer() == null) {
             user.disconnect(message);
-        } else {
-            user.sendMessage(message);
         }
     }
 
@@ -276,8 +274,6 @@ public class ServerConnector extends PacketHandler {
         }
         if (user.isDimensionChange()) {
             user.disconnect(event.getKickReason());
-        } else {
-            user.sendMessage(event.getKickReason());
         }
         throw CancelSendSignal.INSTANCE;
     }

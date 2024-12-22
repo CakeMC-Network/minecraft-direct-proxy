@@ -51,7 +51,6 @@ public class DownstreamBridge extends PacketHandler {
         if (def != null) {
             server.setObsolete(true);
             con.connectNow(def, ConnectionReason.SERVER_DOWN_REDIRECT);
-            con.sendMessage("service '%s' closed.".formatted(def.getName()));
         } else {
             con.disconnect(t.getMessage());
         }
@@ -72,7 +71,6 @@ public class DownstreamBridge extends PacketHandler {
         if (def != null) {
             server.setObsolete(true);
             con.connectNow(def, ConnectionReason.SERVER_DOWN_REDIRECT);
-            con.sendMessage("service '%s' closed.".formatted(def.getName()));
         } else {
             con.disconnect("lost connection to service.");
         }

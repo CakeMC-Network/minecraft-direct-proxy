@@ -59,15 +59,6 @@ public abstract class AbstractPacketHandler {
     /**
      * Handle.
      *
-     * @param chat the chat
-     * @throws Exception the exception
-     */
-    public void handle(SystemChatPacket chat) throws Exception {
-    }
-
-    /**
-     * Handle.
-     *
      * @param respawnPacket the respawn packet
      * @throws Exception the exception
      */
