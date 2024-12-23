@@ -115,10 +115,6 @@ public class DownstreamBridge extends PacketHandler {
 
     @Override
     public void handle(ServerDataPacket serverDataPacket) throws Exception {
-        // 1.19.4 doesn't allow empty MOTD and we probably don't want to simulate a ping event to get the "correct" one
-        // serverDataPacket.setMotd( null );
-        // serverDataPacket.setIcon( null );
-        // con.unsafe().sendPacket( serverDataPacket );
         throw CancelSendSignal.INSTANCE;
     }
 

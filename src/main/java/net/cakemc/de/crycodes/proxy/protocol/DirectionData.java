@@ -127,7 +127,9 @@ public final class DirectionData {
             throw new BadPacketException("Unsupported protocol version");
         }
 
-        return protocolData.packetMap.get(packet);
+        int packetId = protocolData.packetMap.get(packet);
+
+        return packetId;
     }
 
     /**

@@ -3,8 +3,10 @@ package net.cakemc.de.crycodes.proxy.target;
 
 import net.cakemc.de.crycodes.proxy.channel.PlayerChannel;
 import net.cakemc.de.crycodes.proxy.network.packet.AbstractPacket;
+import net.cakemc.de.crycodes.proxy.network.packet.impl.DisconnectPacket;
 import net.cakemc.de.crycodes.proxy.protocol.Protocol;
 import net.cakemc.mc.lib.game.text.test.api.chat.BaseComponent;
+import net.cakemc.mc.lib.game.text.test.api.chat.TextComponent;
 
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
@@ -65,19 +67,21 @@ public class TargetServerConnection implements TargetServer {
 
     @Override
     public void disconnect(String reason) {
-        disconnect();
+        disconnect(new TextComponent(reason));
     }
 
     @Override
     public void disconnect(BaseComponent... reason) {
-
-        isObsolete = true;
-        ch.close();
+        disconnect(TextComponent.fromArray(reason));
     }
 
     @Override
     public void disconnect(BaseComponent reason) {
-        disconnect();
+        if (!ch.isClosing()) {
+            // Todo disconnect with exception report
+            ch.close();
+        }
+        isObsolete = true;
     }
 
     @Override

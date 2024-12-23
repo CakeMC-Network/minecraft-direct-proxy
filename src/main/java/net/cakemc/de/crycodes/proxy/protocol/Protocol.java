@@ -1,7 +1,6 @@
 package net.cakemc.de.crycodes.proxy.protocol;
 
 
-import net.cakemc.de.crycodes.proxy.network.packet.AbstractPacket;
 import net.cakemc.de.crycodes.proxy.network.packet.impl.*;
 import net.cakemc.de.crycodes.proxy.network.packet.impl.intent.PlayerIntentPacket;
 import net.cakemc.de.crycodes.proxy.network.packet.impl.login.*;
@@ -33,153 +32,154 @@ public enum Protocol {
         {
             TO_CLIENT.registerPacket(
                     PlayerCreationPacket.class, PlayerCreationPacket::new,
-                    map(ProtocolVersion.MINECRAFT_1_8, 1),
-                    map(ProtocolVersion.MINECRAFT_1_9, 35),
-                    map(ProtocolVersion.MINECRAFT_1_13, 37),
-                    map(ProtocolVersion.MINECRAFT_1_15, 38),
-                    map(ProtocolVersion.MINECRAFT_1_16, 37),
-                    map(ProtocolVersion.MINECRAFT_1_16_2, 36),
-                    map(ProtocolVersion.MINECRAFT_1_17, 38),
-                    map(ProtocolVersion.MINECRAFT_1_19, 35),
-                    map(ProtocolVersion.MINECRAFT_1_19_1, 37),
-                    map(ProtocolVersion.MINECRAFT_1_19_3, 36),
-                    map(ProtocolVersion.MINECRAFT_1_19_4, 40),
-                    map(ProtocolVersion.MINECRAFT_1_20_2, 41),
-                    map(ProtocolVersion.MINECRAFT_1_20_5, 43),
-                    map(ProtocolVersion.MINECRAFT_1_21_2, 0x2C )
+                    map(ProtocolVersion.MINECRAFT_1_8, 0x01),
+                    map(ProtocolVersion.MINECRAFT_1_9, 0x23),
+                    map(ProtocolVersion.MINECRAFT_1_13, 0x25),
+                    map(ProtocolVersion.MINECRAFT_1_15, 0x26),
+                    map(ProtocolVersion.MINECRAFT_1_16, 0x25),
+                    map(ProtocolVersion.MINECRAFT_1_16_2, 0x24),
+                    map(ProtocolVersion.MINECRAFT_1_17, 0x26),
+                    map(ProtocolVersion.MINECRAFT_1_19, 0x23),
+                    map(ProtocolVersion.MINECRAFT_1_19_1, 0x25),
+                    map(ProtocolVersion.MINECRAFT_1_19_3, 0x24),
+                    map(ProtocolVersion.MINECRAFT_1_19_4, 0x28),
+                    map(ProtocolVersion.MINECRAFT_1_20_2, 0x29),
+                    map(ProtocolVersion.MINECRAFT_1_20_5, 0x2B),
+                    map(ProtocolVersion.MINECRAFT_1_21_2, 0x2C)
             );
 
             TO_CLIENT.registerPacket(
                     RespawnPacket.class, RespawnPacket::new,
-                    map(ProtocolVersion.MINECRAFT_1_8, 7),
-                    map(ProtocolVersion.MINECRAFT_1_9, 51),
-                    map(ProtocolVersion.MINECRAFT_1_12, 52),
-                    map(ProtocolVersion.MINECRAFT_1_12_1, 53),
-                    map(ProtocolVersion.MINECRAFT_1_13, 56),
-                    map(ProtocolVersion.MINECRAFT_1_14, 58),
-                    map(ProtocolVersion.MINECRAFT_1_15, 59),
-                    map(ProtocolVersion.MINECRAFT_1_16, 58),
-                    map(ProtocolVersion.MINECRAFT_1_16_2, 57),
-                    map(ProtocolVersion.MINECRAFT_1_17, 61),
-                    map(ProtocolVersion.MINECRAFT_1_19, 59),
-                    map(ProtocolVersion.MINECRAFT_1_19_1, 62),
-                    map(ProtocolVersion.MINECRAFT_1_19_3, 61),
-                    map(ProtocolVersion.MINECRAFT_1_19_4, 65),
-                    map(ProtocolVersion.MINECRAFT_1_20_2, 67),
-                    map(ProtocolVersion.MINECRAFT_1_20_3, 69),
-                    map(ProtocolVersion.MINECRAFT_1_20_5, 71),
-                    map(ProtocolVersion.MINECRAFT_1_21_2, 72)
+                    map(ProtocolVersion.MINECRAFT_1_8, 0x07),
+                    map(ProtocolVersion.MINECRAFT_1_9, 0x33),
+                    map(ProtocolVersion.MINECRAFT_1_12, 0x34),
+                    map(ProtocolVersion.MINECRAFT_1_12_1, 0x35),
+                    map(ProtocolVersion.MINECRAFT_1_13, 0x38),
+                    map(ProtocolVersion.MINECRAFT_1_14, 0x3A),
+                    map(ProtocolVersion.MINECRAFT_1_15, 0x3B),
+                    map(ProtocolVersion.MINECRAFT_1_16, 0x3A),
+                    map(ProtocolVersion.MINECRAFT_1_16_2, 0x39),
+                    map(ProtocolVersion.MINECRAFT_1_17, 0x3D),
+                    map(ProtocolVersion.MINECRAFT_1_19, 0x3B),
+                    map(ProtocolVersion.MINECRAFT_1_19_1, 0x3E),
+                    map(ProtocolVersion.MINECRAFT_1_19_3, 0x3D),
+                    map(ProtocolVersion.MINECRAFT_1_19_4, 0x41),
+                    map(ProtocolVersion.MINECRAFT_1_20_2, 0x43),
+                    map(ProtocolVersion.MINECRAFT_1_20_3, 0x45),
+                    map(ProtocolVersion.MINECRAFT_1_20_5, 0x47),
+                    map(ProtocolVersion.MINECRAFT_1_21_2, 0x4C)
             );
             TO_CLIENT.registerPacket(
                     DisconnectPacket.class, DisconnectPacket::new,
-                    map(ProtocolVersion.MINECRAFT_1_8, 64),
-                    map(ProtocolVersion.MINECRAFT_1_9, 26),
-                    map(ProtocolVersion.MINECRAFT_1_13, 27),
-                    map(ProtocolVersion.MINECRAFT_1_14, 26),
-                    map(ProtocolVersion.MINECRAFT_1_15, 27),
-                    map(ProtocolVersion.MINECRAFT_1_16, 26),
-                    map(ProtocolVersion.MINECRAFT_1_16_2, 25),
-                    map(ProtocolVersion.MINECRAFT_1_17, 26),
-                    map(ProtocolVersion.MINECRAFT_1_19, 23),
-                    map(ProtocolVersion.MINECRAFT_1_19_1, 25),
-                    map(ProtocolVersion.MINECRAFT_1_19_3, 23),
-                    map(ProtocolVersion.MINECRAFT_1_19_4, 26),
-                    map(ProtocolVersion.MINECRAFT_1_20_2, 27),
-                    map(ProtocolVersion.MINECRAFT_1_20_5, 29)
+                    map(ProtocolVersion.MINECRAFT_1_8, 0x40),
+                    map(ProtocolVersion.MINECRAFT_1_9, 0x1A),
+                    map(ProtocolVersion.MINECRAFT_1_13, 0x1B),
+                    map(ProtocolVersion.MINECRAFT_1_14, 0x1A),
+                    map(ProtocolVersion.MINECRAFT_1_15, 0x1B),
+                    map(ProtocolVersion.MINECRAFT_1_16, 0x1A),
+                    map(ProtocolVersion.MINECRAFT_1_16_2, 0x19),
+                    map(ProtocolVersion.MINECRAFT_1_17, 0x1A),
+                    map(ProtocolVersion.MINECRAFT_1_19, 0x17),
+                    map(ProtocolVersion.MINECRAFT_1_19_1, 0x19),
+                    map(ProtocolVersion.MINECRAFT_1_19_3, 0x17),
+                    map(ProtocolVersion.MINECRAFT_1_19_4, 0x1A),
+                    map(ProtocolVersion.MINECRAFT_1_20_2, 0x1B),
+                    map(ProtocolVersion.MINECRAFT_1_20_5, 0x1D)
             );
             TO_CLIENT.registerPacket(
                     EntityStatusPacket.class, EntityStatusPacket::new,
-                    map(ProtocolVersion.MINECRAFT_1_8, 26),
-                    map(ProtocolVersion.MINECRAFT_1_9, 27),
-                    map(ProtocolVersion.MINECRAFT_1_13, 28),
-                    map(ProtocolVersion.MINECRAFT_1_14, 27),
-                    map(ProtocolVersion.MINECRAFT_1_15, 28),
-                    map(ProtocolVersion.MINECRAFT_1_16, 27),
-                    map(ProtocolVersion.MINECRAFT_1_16_2, 26),
-                    map(ProtocolVersion.MINECRAFT_1_17, 27),
-                    map(ProtocolVersion.MINECRAFT_1_19, 24),
-                    map(ProtocolVersion.MINECRAFT_1_19_1, 26),
-                    map(ProtocolVersion.MINECRAFT_1_19_3, 25),
-                    map(ProtocolVersion.MINECRAFT_1_19_4, 28),
-                    map(ProtocolVersion.MINECRAFT_1_20_2, 29),
-                    map(ProtocolVersion.MINECRAFT_1_20_5, 31)
+                    map(ProtocolVersion.MINECRAFT_1_8, 0x1A),
+                    map(ProtocolVersion.MINECRAFT_1_9, 0x1B),
+                    map(ProtocolVersion.MINECRAFT_1_13, 0x1C),
+                    map(ProtocolVersion.MINECRAFT_1_14, 0x1B),
+                    map(ProtocolVersion.MINECRAFT_1_15, 0x1C),
+                    map(ProtocolVersion.MINECRAFT_1_16, 0x1B),
+                    map(ProtocolVersion.MINECRAFT_1_16_2, 0x1A),
+                    map(ProtocolVersion.MINECRAFT_1_17, 0x1B),
+                    map(ProtocolVersion.MINECRAFT_1_19, 0x18),
+                    map(ProtocolVersion.MINECRAFT_1_19_1, 0x1A),
+                    map(ProtocolVersion.MINECRAFT_1_19_3, 0x19),
+                    map(ProtocolVersion.MINECRAFT_1_19_4, 0x1C),
+                    map(ProtocolVersion.MINECRAFT_1_20_2, 0x1D),
+                    map(ProtocolVersion.MINECRAFT_1_20_5, 0x1F)
             );
             TO_CLIENT.registerPacket(
                     GameStatePacket.class, GameStatePacket::new,
-                    map(ProtocolVersion.MINECRAFT_1_15, 31),
-                    map(ProtocolVersion.MINECRAFT_1_16, 30),
-                    map(ProtocolVersion.MINECRAFT_1_16_2, 29),
-                    map(ProtocolVersion.MINECRAFT_1_17, 30),
-                    map(ProtocolVersion.MINECRAFT_1_19, 27),
-                    map(ProtocolVersion.MINECRAFT_1_19_1, 29),
-                    map(ProtocolVersion.MINECRAFT_1_19_3, 28),
-                    map(ProtocolVersion.MINECRAFT_1_19_4, 31),
-                    map(ProtocolVersion.MINECRAFT_1_20_2, 32),
-                    map(ProtocolVersion.MINECRAFT_1_20_5, 34),
+                    map(ProtocolVersion.MINECRAFT_1_15, 0x1F),
+                    map(ProtocolVersion.MINECRAFT_1_16, 0x1E),
+                    map(ProtocolVersion.MINECRAFT_1_16_2, 0x1D),
+                    map(ProtocolVersion.MINECRAFT_1_17, 0x1E),
+                    map(ProtocolVersion.MINECRAFT_1_19, 0x1B),
+                    map(ProtocolVersion.MINECRAFT_1_19_1, 0x1D),
+                    map(ProtocolVersion.MINECRAFT_1_19_3, 0x1C),
+                    map(ProtocolVersion.MINECRAFT_1_19_4, 0x1F),
+                    map(ProtocolVersion.MINECRAFT_1_20_2, 0x20),
+                    map(ProtocolVersion.MINECRAFT_1_20_5, 0x22),
                     map(ProtocolVersion.MINECRAFT_1_21_2, 0x23)
             );
             TO_CLIENT.registerPacket(
                     SetSimulationDistancePacket.class, SetSimulationDistancePacket::new,
-                    map(ProtocolVersion.MINECRAFT_1_14, 65),
-                    map(ProtocolVersion.MINECRAFT_1_15, 66),
-                    map(ProtocolVersion.MINECRAFT_1_16, 65),
-                    map(ProtocolVersion.MINECRAFT_1_17, 74),
-                    map(ProtocolVersion.MINECRAFT_1_19, 73),
-                    map(ProtocolVersion.MINECRAFT_1_19_1, 76),
-                    map(ProtocolVersion.MINECRAFT_1_19_3, 75),
-                    map(ProtocolVersion.MINECRAFT_1_19_4, 79),
-                    map(ProtocolVersion.MINECRAFT_1_20_2, 81),
-                    map(ProtocolVersion.MINECRAFT_1_20_3, 83),
-                    map(ProtocolVersion.MINECRAFT_1_20_5, 85)
+                    map(ProtocolVersion.MINECRAFT_1_14, 0x41),
+                    map(ProtocolVersion.MINECRAFT_1_15, 0x42),
+                    map(ProtocolVersion.MINECRAFT_1_16, 0x41),
+                    map(ProtocolVersion.MINECRAFT_1_17, 0x4A),
+                    map(ProtocolVersion.MINECRAFT_1_19, 0x49),
+                    map(ProtocolVersion.MINECRAFT_1_19_1, 0x4C),
+                    map(ProtocolVersion.MINECRAFT_1_19_3, 0x4B),
+                    map(ProtocolVersion.MINECRAFT_1_19_4, 0x4F),
+                    map(ProtocolVersion.MINECRAFT_1_20_2, 0x51),
+                    map(ProtocolVersion.MINECRAFT_1_20_3, 0x53),
+                    map(ProtocolVersion.MINECRAFT_1_20_5, 0x55),
+                    map(ProtocolVersion.MINECRAFT_1_21_2, 0x59)
             );
             TO_CLIENT.registerPacket(
                     ServerDataPacket.class, ServerDataPacket::new,
-                    map(ProtocolVersion.MINECRAFT_1_19, 63),
-                    map(ProtocolVersion.MINECRAFT_1_19_1, 66),
-                    map(ProtocolVersion.MINECRAFT_1_19_3, 65),
-                    map(ProtocolVersion.MINECRAFT_1_19_4, 69),
-                    map(ProtocolVersion.MINECRAFT_1_20_2, 71),
-                    map(ProtocolVersion.MINECRAFT_1_20_3, 73),
-                    map(ProtocolVersion.MINECRAFT_1_20_5, 75),
-                    map(ProtocolVersion.MINECRAFT_1_21_2, 76)
+                    map(ProtocolVersion.MINECRAFT_1_19, 0x3F),
+                    map(ProtocolVersion.MINECRAFT_1_19_1, 0x42),
+                    map(ProtocolVersion.MINECRAFT_1_19_3, 0x41),
+                    map(ProtocolVersion.MINECRAFT_1_19_4, 0x45),
+                    map(ProtocolVersion.MINECRAFT_1_20_2, 0x47),
+                    map(ProtocolVersion.MINECRAFT_1_20_3, 0x49),
+                    map(ProtocolVersion.MINECRAFT_1_20_5, 0x4B),
+                    map(ProtocolVersion.MINECRAFT_1_21_2, 0x50)
             );
             TO_CLIENT.registerPacket(
                     StartConfigurationPacket.class, StartConfigurationPacket::new,
-                    map(ProtocolVersion.MINECRAFT_1_20_2, 101),
-                    map(ProtocolVersion.MINECRAFT_1_20_3, 103),
-                    map(ProtocolVersion.MINECRAFT_1_20_5, 105),
-                    map(ProtocolVersion.MINECRAFT_1_21_2, 108)
+                    map(ProtocolVersion.MINECRAFT_1_20_2, 0x65),
+                    map(ProtocolVersion.MINECRAFT_1_20_3, 0x67),
+                    map(ProtocolVersion.MINECRAFT_1_20_5, 0x69),
+                    map(ProtocolVersion.MINECRAFT_1_21_2, 0x70)
             );
             TO_CLIENT.registerPacket(
                     ServerTransferPacket.class, ServerTransferPacket::new,
-                    map(ProtocolVersion.MINECRAFT_1_20_5, 115),
-                    map(ProtocolVersion.MINECRAFT_1_21_2, 118)
+                    map(ProtocolVersion.MINECRAFT_1_20_5, 0x73),
+                    map(ProtocolVersion.MINECRAFT_1_21_2, 0x7A)
             );
             TO_CLIENT.registerPacket(
                     DisconnectReportDetailsPacket.class, DisconnectReportDetailsPacket::new,
-                    map(ProtocolVersion.MINECRAFT_1_21, 122),
-                    map(ProtocolVersion.MINECRAFT_1_21_2, 125)
+                    map(ProtocolVersion.MINECRAFT_1_21, 0x7A),
+                    map(ProtocolVersion.MINECRAFT_1_21_2, 0x81)
             );
             TO_SERVER.registerPacket(
                     ClientSettingsPacket.class, ClientSettingsPacket::new,
-                    map(ProtocolVersion.MINECRAFT_1_8, 21),
-                    map(ProtocolVersion.MINECRAFT_1_9, 4),
-                    map(ProtocolVersion.MINECRAFT_1_12, 5),
-                    map(ProtocolVersion.MINECRAFT_1_12_1, 4),
-                    map(ProtocolVersion.MINECRAFT_1_14, 5),
-                    map(ProtocolVersion.MINECRAFT_1_19, 7),
-                    map(ProtocolVersion.MINECRAFT_1_19_1, 8),
-                    map(ProtocolVersion.MINECRAFT_1_19_3, 7),
-                    map(ProtocolVersion.MINECRAFT_1_19_4, 8),
-                    map(ProtocolVersion.MINECRAFT_1_20_2, 9),
-                    map(ProtocolVersion.MINECRAFT_1_20_5, 10),
-                    map(ProtocolVersion.MINECRAFT_1_21_2, 12)
+                    map(ProtocolVersion.MINECRAFT_1_8, 0x15),
+                    map(ProtocolVersion.MINECRAFT_1_9, 0x04),
+                    map(ProtocolVersion.MINECRAFT_1_12, 0x05),
+                    map(ProtocolVersion.MINECRAFT_1_12_1, 0x04),
+                    map(ProtocolVersion.MINECRAFT_1_14, 0x05),
+                    map(ProtocolVersion.MINECRAFT_1_19, 0x07),
+                    map(ProtocolVersion.MINECRAFT_1_19_1, 0x08),
+                    map(ProtocolVersion.MINECRAFT_1_19_3, 0x07),
+                    map(ProtocolVersion.MINECRAFT_1_19_4, 0x08),
+                    map(ProtocolVersion.MINECRAFT_1_20_2, 0x09),
+                    map(ProtocolVersion.MINECRAFT_1_20_5, 0x0A),
+                    map(ProtocolVersion.MINECRAFT_1_21_2, 0x0C)
             );
             TO_SERVER.registerPacket(
                     StartConfigurationPacket.class, StartConfigurationPacket::new,
-                    map(ProtocolVersion.MINECRAFT_1_20_2, 11),
-                    map(ProtocolVersion.MINECRAFT_1_20_5, 12),
-                    map(ProtocolVersion.MINECRAFT_1_21_2, 14)
+                    map(ProtocolVersion.MINECRAFT_1_20_2, 0x0B),
+                    map(ProtocolVersion.MINECRAFT_1_20_5, 0x0C),
+                    map(ProtocolVersion.MINECRAFT_1_21_2, 0x0E)
             );
         }
     },

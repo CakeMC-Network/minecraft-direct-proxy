@@ -436,7 +436,7 @@ public class ProxyLoginHandler extends PacketHandler implements PendingConnectio
 
     @Override
     public void exception(Throwable t) throws Exception {
-        disconnect(t.getMessage());
+        System.err.printf("EX exception in login: %s%n", t.getMessage());
     }
 
     @Override

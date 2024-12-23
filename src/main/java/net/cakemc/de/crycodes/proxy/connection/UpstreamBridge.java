@@ -39,7 +39,7 @@ public class UpstreamBridge extends PacketHandler {
 
     @Override
     public void exception(Throwable t) throws Exception {
-        con.disconnect(t.getMessage());
+        System.err.printf("EX exception in connection: %s%n", t.getMessage());
     }
 
     @Override

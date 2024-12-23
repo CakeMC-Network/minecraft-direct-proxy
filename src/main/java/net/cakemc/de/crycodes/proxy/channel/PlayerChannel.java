@@ -152,7 +152,8 @@ public class PlayerChannel {
         if (!closed) {
             closed = closing = true;
             if (packet != null && channel.isActive()) {
-                channel.writeAndFlush(packet).addListeners(ChannelFutureListener.FIRE_EXCEPTION_ON_FAILURE,
+                channel.writeAndFlush(packet)
+                        .addListeners(ChannelFutureListener.FIRE_EXCEPTION_ON_FAILURE,
                         ChannelFutureListener.CLOSE);
             } else {
                 channel.flush();

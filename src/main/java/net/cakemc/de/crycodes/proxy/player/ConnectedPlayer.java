@@ -21,6 +21,7 @@ import net.cakemc.de.crycodes.proxy.network.packet.ProtocolPacket;
 import net.cakemc.de.crycodes.proxy.network.packet.impl.ClientSettingsPacket;
 import net.cakemc.de.crycodes.proxy.network.packet.impl.DisconnectPacket;
 import net.cakemc.de.crycodes.proxy.network.packet.impl.ServerTransferPacket;
+import net.cakemc.de.crycodes.proxy.network.packet.impl.StartConfigurationPacket;
 import net.cakemc.de.crycodes.proxy.network.packet.impl.login.ServerSetCompressionPacket;
 import net.cakemc.de.crycodes.proxy.protocol.Protocol;
 import net.cakemc.de.crycodes.proxy.target.*;

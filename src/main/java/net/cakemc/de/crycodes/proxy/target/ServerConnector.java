@@ -118,12 +118,12 @@ public class ServerConnector extends PacketHandler {
 
     @Override
     public void exception(Throwable t) throws Exception {
+        System.err.printf("EX exception in server connector: %s%n", t.getMessage());
         if (obsolete) {
             return;
         }
-        String message = "Exception Connecting: " + t.getMessage();
         if (user.getServer() == null) {
-            user.disconnect(message);
+            user.disconnect(t.getMessage());
         }
     }
 
@@ -224,7 +224,7 @@ public class ServerConnector extends PacketHandler {
         if (user.getPendingConnection().getVersion() >= ProtocolVersion.MINECRAFT_1_20_2.getProtocolId()) {
             if (user.getServer() != null) {
                 // Begin config mode
-                user.sendPacket(new StartConfigurationPacket());
+                user.sendPacket(new StartConfigurationPacket()); //todo throw error
             } else {
                 PlayerProfile playerProfile = user.getPendingConnection().getProfile();
 
