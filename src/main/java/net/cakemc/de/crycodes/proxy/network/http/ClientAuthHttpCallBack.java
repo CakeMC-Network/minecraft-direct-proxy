@@ -7,8 +7,6 @@ import net.cakemc.mc.lib.common.type.json.JsonParser;
 import net.cakemc.mc.lib.common.type.json.JsonValue;
 import net.cakemc.mc.lib.game.PlayerProfile;
 import net.cakemc.mc.lib.game.PlayerProfile.Property;
-import net.cakemc.protocol.player.NetworkPlayerConnection;
-import net.cakemc.protocol.protocols.intern.packets.client.ClientGameProfilePacket;
 
 import java.io.IOException;
 import java.util.ArrayList;
