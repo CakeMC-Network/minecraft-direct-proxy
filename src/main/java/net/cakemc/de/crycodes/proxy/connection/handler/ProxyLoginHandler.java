@@ -398,7 +398,7 @@ public class ProxyLoginHandler extends PacketHandler implements PendingConnectio
 
     @Override
     public String getUUID() {
-        return uniqueId.toString().replace("-", "");
+        return uniqueId.toString();
     }
 
     @Override
